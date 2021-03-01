@@ -1,5 +1,6 @@
 import tkinter.messagebox
 import subprocess
+import tkinter as tk
 from tkinter import filedialog
 from tkinter.filedialog import *
 from tkinter import ttk
@@ -51,7 +52,7 @@ def new_file(a):
             root.title('New File - TextPad!')
             status_bar.config(text="New File    ")
         else:
-            my_text.delete("1.0", END)
+            my_text.delete("1.0", tk.END)
             root.title('New File - TextPad!')
             status_bar.config(text="New File    ")
         redraw()
@@ -72,7 +73,7 @@ def open_file(a):
                 save_file(False)
                 return
     my_text.delete(1.0, 'end-1c')
-    text_file = filedialog.askopenfilename(initialdir="C:/Users/bunna/Desktop/", title="Open File", filetypes=(("C Files", "*.c"), ("C++ Files", "*.cpp")))
+    text_file = filedialog.askopenfilename(initialdir="C:", title="Open File", filetypes=(("C Files", "*.c"), ("C++ Files", "*.cpp")))
 
     if text_file:
         global open_status_name
@@ -95,7 +96,7 @@ def open_file(a):
 
     text_file = open(text_file, 'r')
     stuff = text_file.read()
-    my_text.insert(END, stuff)
+    my_text.insert(tk.END, stuff)
     text_file.close()
     redraw()
     highlight_text()
@@ -123,7 +124,7 @@ def save_as(a):
     global file_location
     global saved_file
     global file_type
-    text_file = filedialog.asksaveasfilename(defaultextension=".*", initialdir="C:/Users/bunna/Desktop/", title="Save File", filetypes=(("C Files", "*.c"), ("C++ Files", "*.cpp")))
+    text_file = filedialog.asksaveasfilename(defaultextension=".*", initialdir="C:", title="Save File", filetypes=(("C Files", "*.c"), ("C++ Files", "*.cpp")))
     if text_file:
         name = text_file
         saved_file = True
@@ -186,7 +187,7 @@ def paste_text(a):
         selected = root.clipboard_get()
     else:
         if selected:
-            position = my_text.index(INSERT)
+            position = my_text.index(tk.INSERT)
             my_text.insert(position, selected)
 
 
@@ -195,14 +196,14 @@ def find_text(a):
     find_win.wm_title("Find")
     find_win.geometry("300x80")
     find_win.resizable(False, False)
-    label1 = Label(find_win, text="Find Text:", height=0, width=7)
-    label1.pack(side=LEFT, anchor=N, padx=10, pady=10)
-    entry1 = Entry(find_win, width=40)
-    entry1.pack(fill=X, anchor=N, padx=10, pady=10)
-    button2 = Button(find_win, text="Cancel", command=lambda: cancel_search())
-    button2.pack(side=RIGHT, padx=5, pady=5)
-    button1 = Button(find_win, text="Find Next", command=lambda: search_text())
-    button1.pack(side=RIGHT, padx=5, pady=5)
+    label1 = tk.Label(find_win, text="Find Text:", height=0, width=7)
+    label1.pack(side=tk.LEFT, anchor=tk.N, padx=10, pady=10)
+    entry1 = tk.Entry(find_win, width=40)
+    entry1.pack(fill=tk.X, anchor=tk.N, padx=10, pady=10)
+    button2 = tk.Button(find_win, text="Cancel", command=lambda: cancel_search())
+    button2.pack(side=tk.RIGHT, padx=5, pady=5)
+    button1 = tk.Button(find_win, text="Find Next", command=lambda: search_text())
+    button1.pack(side=tk.RIGHT, padx=5, pady=5)
     find_win.bind('<Return>', lambda event: search_text())
     find_win.bind('<Escape>', lambda event: cancel_search())
     find_win.protocol("WM_DELETE_WINDOW", lambda: cancel_search())
@@ -218,7 +219,7 @@ def find_text(a):
         if s:
             idx = '1.0'
             while 1:
-                idx = my_text.search(s, idx, nocase=1, stopindex=END, count=length)
+                idx = my_text.search(s, idx, nocase=1, stopindex=tk.END, count=length)
                 if not idx:
                     break
 
@@ -239,11 +240,61 @@ def about_us():
     about_win.wm_title("About Digital MCU Simulator")
     about_win.geometry("350x250")
     about_win.attributes("-toolwindow", True)
-    label1 = Label(about_win, text="Texas A&M University\nVersion 1.0.0\n© 2020 All Rights Reserved\n\nDigital MCU Simulator is an application that combines an IDE,\n a Microcontroller Simulator, a Waveform, \nand a Hardware Communication System. \n\nThis application is meant for educational use only.\n\nCreated by: Bunnarak Theng\n            Anvesh Kandi\n            Jonathan Howard\n            Jose Santos")
-    label1.pack(side=LEFT, padx=10, pady=10)
+    label1 = tk.Label(about_win, text="Texas A&M University\nVersion 1.0.0\n© 2020 All Rights Reserved\n\nDigital MCU Simulator is an application that combines an IDE,\n a Microcontroller Simulator, a Waveform, \nand a Hardware Communication System. \n\nThis application is meant for educational use only.\n\nCreated by: Bunnarak Theng\n            Anvesh Kandi\n            Jonathan Howard\n            Jose Santos")
+    label1.pack(side=tk.LEFT, padx=10, pady=10)
 
 
-def run(a):
+def compile(a):
+    global file_location    
+    global file_type
+    global file_name
+    global file_name_path
+    global saved_file
+    global process
+    compile_output = ""
+    error = ""
+    print(file_location)
+    print(file_name_path)
+    print(file_name)
+    print(file_type)
+    if (file_name == "fn") and (file_name_path == "fnp") and (file_type == "ft") and (file_location == "fl"):
+        saved_file = False
+    if saved_file:
+        check = check_for_compiler()
+        if check:
+            os.chdir(r"{}".format(file_location))
+            if file_type.lower() == "cpp":
+                p = subprocess.Popen(['g++', '-c', file_name + '.cpp'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+                error = p.communicate()[0].decode("utf-8")
+                if error == "":
+                    p = subprocess.Popen(['objdump', '-d', file_name + '.o'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+                    compile_output = p.communicate()[0].decode("utf-8")
+                else:
+                    compile_output = "Error: \n\n" + error
+            elif file_type.lower() == "c":
+                p = subprocess.Popen(['gcc', '-c', file_name + '.c'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+                error = p.communicate()[0].decode("utf-8")
+                if error == "":
+                    p = subprocess.Popen(['objdump', '-d', file_name + '.o'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+                    compile_output = p.communicate()[0].decode("utf-8")
+                else:
+                    compile_output = "Error: \n\n" + error
+            else:
+                pass
+            my_text2.configure(state="normal")
+            my_text2.delete(1.0, 'end-1c')
+            my_text2.insert(tk.INSERT, os.getcwd() + "\n" + compile_output)
+            my_text2.configure(state="disabled")
+        else:
+            pass
+    else:
+        answer = tkinter.messagebox.askyesno(title="Warning", message="The file needs to be saved first before running. Do you want to save the file?")
+        if answer:
+            save_file(False)
+        else:
+            pass
+
+"""def compile(a):
     global file_location
     global file_type
     global file_name
@@ -291,19 +342,19 @@ def run(a):
         if answer:
             save_file(False)
         else:
-            pass
+            pass"""
 
 
 def check_for_compiler():
     global file_type
-    s_to_find = "Copyright (C)"
+    s_to_find = "Copyright"
     s = ""
     if file_type.lower() == 'c' or file_type.lower() == 'cpp':
         if file_type.lower() == 'c':
-            p = subprocess.Popen([r'g++', '--version'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(['g++', '--version'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
             s = p.communicate()[0].decode("utf-8")
         elif file_type.lower() == 'cpp':
-            p = subprocess.Popen([r'gcc', '--version'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(['gcc', '--version'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
             s = p.communicate()[0].decode("utf-8")
         if s.find(s_to_find) == -1:
             answer = tkinter.messagebox.askyesno(title="Warning", message="No C/C++ compiler can be found. Please install a C/C++ compiler first before running again.\n\nDo you want to install Cygwin?")
@@ -321,6 +372,10 @@ def stop(p):
     os.kill(p.pid, signal.CTRL_C_EVENT)
 
 
+def upload(a):
+    print("Hello")
+
+
 def start_debug(a):
     global file_type
     global file_name
@@ -334,7 +389,7 @@ def start_debug(a):
     output = ""
     bp_location = []
     if len(breakpoint_list) == 0:
-        run(a)
+        compile(a)
         return
     if (file_name == "fn") and (file_name_path == "fnp") and (file_type == "ft") and (file_location == "fl"):
         saved_file = False
@@ -363,9 +418,9 @@ def start_debug(a):
                     last_breakpoint = min(bp_location)
                     my_text.tag_add("breakpoint", str(last_breakpoint) + ".0", str(last_breakpoint) + ".999")
                     my_text.tag_configure("breakpoint", background="red", foreground="black")
-                    runMenu.entryconfigure(4, state='normal')
-                    runMenu.entryconfigure(5, state='normal')
-                    runMenu.entryconfigure(6, state='normal')
+                    sketchMenu.entryconfigure(4, state='normal')
+                    sketchMenu.entryconfigure(5, state='normal')
+                    sketchMenu.entryconfigure(6, state='normal')
                 else:
                     output = error
             elif file_type.lower() == "c":
@@ -389,9 +444,9 @@ def start_debug(a):
                     last_breakpoint = min(bp_location)
                     my_text.tag_add("breakpoint", str(last_breakpoint) + ".0", str(last_breakpoint) + ".999")
                     my_text.tag_configure("breakpoint", background="red", foreground="black")
-                    runMenu.entryconfigure(4, state='normal')
-                    runMenu.entryconfigure(5, state='normal')
-                    runMenu.entryconfigure(6, state='normal')
+                    sketchMenu.entryconfigure(4, state='normal')
+                    sketchMenu.entryconfigure(5, state='normal')
+                    sketchMenu.entryconfigure(6, state='normal')
                 else:
                     output = error
             else:
@@ -404,7 +459,7 @@ def start_debug(a):
             pass
     my_text3.configure(state="normal")
     my_text3.delete(1.0, 'end-1c')
-    my_text3.insert(INSERT, os.getcwd() + "\n" + output)
+    my_text3.insert(tk.INSERT, os.getcwd() + "\n" + output)
     my_text3.configure(state="disabled")
 
 
@@ -443,7 +498,7 @@ def step_debug(a):
     s = ''.join(debug_output)
     my_text3.configure(state="normal")
     my_text3.delete(1.0, 'end-1c')
-    my_text3.insert(INSERT, os.getcwd() + "\n" + s)
+    my_text3.insert(tk.INSERT, os.getcwd() + "\n" + s)
     my_text3.configure(state="disabled")
 
 
@@ -464,7 +519,7 @@ def continue_debug(a):
     s = ''.join(debug_output)
     my_text3.configure(state="normal")
     my_text3.delete(1.0, 'end-1c')
-    my_text3.insert(INSERT, os.getcwd() + "\n" + s)
+    my_text3.insert(tk.INSERT, os.getcwd() + "\n" + s)
     my_text3.configure(state="disabled")
 
 
@@ -478,11 +533,11 @@ def stop_debug(a):
     my_text.tag_remove("breakpoint", str(last_breakpoint) + ".0", str(last_breakpoint) + ".999")
     my_text3.configure(state="normal")
     my_text3.delete(1.0, 'end-1c')
-    my_text3.insert(INSERT, os.getcwd())
+    my_text3.insert(tk.INSERT, os.getcwd())
     my_text3.configure(state="disabled")
-    runMenu.entryconfigure(4, state='disabled')
-    runMenu.entryconfigure(5, state='disabled')
-    runMenu.entryconfigure(6, state='disabled')
+    sketchMenu.entryconfigure(4, state='disabled')
+    sketchMenu.entryconfigure(5, state='disabled')
+    sketchMenu.entryconfigure(6, state='disabled')
 
 
 def get_line_number():
@@ -525,6 +580,13 @@ def get_breakpoint(event):
             breakpoint_list.append(str(bp))
     redraw()
     print("Clicked at: ", bp)
+
+
+def get_keyboard_pressed(event):
+    key_pressed = repr(event.char)
+    if key_pressed == "'{'":
+        my_text.insert(my_text.index(tk.INSERT), "}")
+    print(key_pressed)
 
 
 def highlight_text():
@@ -576,46 +638,46 @@ def highlight_text():
     my_text.tag_configure("Token.Operator.Word", foreground="#FF0000")
 
 
-root = Tk()
+root = tk.Tk()
 root.title("Digital MCU Simulator IDE")
-root.iconbitmap('C:/Users/bunna/Desktop/Code/Python/DMCUS/icon.ico')
+#root.iconbitmap('C:/Users/bunna/Desktop/Code/Python/DMCUS/icon.ico')
 root.geometry("1200x750")
 
 
-my_frame = Frame(root)
-my_frame.pack(fill=X, side=TOP)
+my_frame = tk.Frame(root)
+my_frame.pack(fill=tk.X, side=tk.TOP)
 
 tab_parent = ttk.Notebook(root)
 tab1 = ttk.Frame(tab_parent)
 tab2 = ttk.Frame(tab_parent)
-tab_parent.add(tab1, text="       Run       ")
+tab_parent.add(tab1, text="       Result       ")
 tab_parent.add(tab2, text="       Debug       ")
-tab_parent.pack(expand=1, fill=X, side=TOP)
+tab_parent.pack(expand=1, fill=tk.X, side=tk.TOP)
 
-my_frame2 = Frame(root)
-my_frame2.pack(expand=1, fill=X, side=BOTTOM)
-status_bar = Label(my_frame2, text='Ready    ', anchor=E)
-status_bar.pack(fill=X, side=RIGHT, ipady=5)
+my_frame2 = tk.Frame(root)
+my_frame2.pack(expand=1, fill=tk.X, side=tk.BOTTOM)
+status_bar = tk.Label(my_frame2, text='Ready    ', anchor=tk.E)
+status_bar.pack(fill=tk.X, side=tk.RIGHT, ipady=5)
 
-text_scroll = Scrollbar(my_frame)
-text_scroll.pack(side=RIGHT, fill=Y)
-hor_scroll = Scrollbar(my_frame, orient="horizontal")
-hor_scroll.pack(side=BOTTOM, fill=X)
+text_scroll = tk.Scrollbar(my_frame)
+text_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+hor_scroll = tk.Scrollbar(my_frame, orient="horizontal")
+hor_scroll.pack(side=tk.BOTTOM, fill=tk.X)
 
-my_text = Text(my_frame, width=108, height=22, font=("Arial", 16), selectbackground="yellow", selectforeground="black", undo=True, yscrollcommand=text_scroll.set, xscrollcommand=hor_scroll.set, wrap="none")
-my_text2 = Text(tab1, width=95, height=5, font=("Arial", 16))
-my_text2.insert(INSERT, os.getcwd() + "\n")
+my_text = tk.Text(my_frame, width=108, height=22, font=("Arial", 16), selectbackground="yellow", selectforeground="black", undo=True, yscrollcommand=text_scroll.set, xscrollcommand=hor_scroll.set, wrap="none")
+my_text2 = tk.Text(tab1, width=95, height=5, font=("Arial", 16))
+my_text2.insert(tk.INSERT, os.getcwd() + "\n")
 my_text2.configure(state='disabled')
-my_text2.pack(fill=X)
-my_text3 = Text(tab2, width=100, height=5, font=("Arial", 16))
-my_text3.pack(fill=X)
-my_text3.insert(INSERT, os.getcwd() + "\n")
+my_text2.pack(fill=tk.X)
+my_text3 = tk.Text(tab2, width=100, height=5, font=("Arial", 16))
+my_text3.pack(fill=tk.X)
+my_text3.insert(tk.INSERT, os.getcwd() + "\n")
 my_text3.configure(state='disabled')
 
-my_canvas = Canvas(my_frame, width=25, height=22)
-my_canvas.pack(fill=BOTH, side=LEFT, padx=5, pady=5)
+my_canvas = tk.Canvas(my_frame, width=25, height=22)
+my_canvas.pack(fill=tk.BOTH, side=tk.LEFT, padx=5, pady=5)
 
-my_text.pack(fill=BOTH, side=RIGHT, padx=5, pady=5)
+my_text.pack(fill=tk.BOTH, side=tk.RIGHT, padx=5, pady=5)
 root.bind("<Return>", lambda event: redraw())
 root.bind("<BackSpace>", lambda event: redraw())
 my_text.bind("<MouseWheel>", lambda event: redraw())
@@ -625,17 +687,17 @@ my_canvas.bind("<Button-1>", get_breakpoint)
 my_text.bind("<BackSpace>", lambda event: highlight_text())
 my_text.bind("<space>", lambda event: highlight_text())
 my_text.bind("<Return>", lambda event: highlight_text())
-#root.bind("<BackSpace>", lambda event: highlight_text())
+my_text.bind("<Key>", get_keyboard_pressed)
 #root.bind("<space>", lambda event: highlight_text())
 #root.bind("<Return>", lambda event: highlight_text())
 
 text_scroll.config(command=my_text.yview)
 hor_scroll.config(command=my_text.xview)
 
-menubar = Menu(root)
+menubar = tk.Menu(root)
 root.config(menu=menubar)
 
-fileMenu = Menu(menubar, tearoff=False)
+fileMenu = tk.Menu(menubar, tearoff=False)
 fileMenu.add_command(label="New", command=lambda: new_file(False), accelerator="Ctrl+N")
 fileMenu.add_command(label="Open", command=lambda: open_file(False), accelerator="Ctrl+O")
 fileMenu.add_command(label="Save", command=lambda: save_file(False), accelerator="Ctrl+S")
@@ -644,7 +706,7 @@ fileMenu.add_separator()
 fileMenu.add_command(label="Exit", command=exit_app)
 menubar.add_cascade(label="File", menu=fileMenu)
 
-editMenu = Menu(menubar, tearoff=False)
+editMenu = tk.Menu(menubar, tearoff=False)
 editMenu.add_command(label="Cut", command=lambda: cut_text(False), accelerator="Ctrl+X")
 editMenu.add_command(label="Copy", command=lambda: copy_text(False), accelerator="Ctrl+C")
 editMenu.add_command(label="Paste", command=lambda: paste_text(False), accelerator="Ctrl+V")
@@ -655,20 +717,22 @@ editMenu.add_command(label="Undo", command=my_text.edit_undo, accelerator="Ctrl+
 editMenu.add_command(label="Redo", command=my_text.edit_redo, accelerator="Ctrl+Y")
 menubar.add_cascade(label="Edit", menu=editMenu)
 
-runMenu = Menu(menubar, tearoff=False)
-runMenu.add_command(label="Run", command=lambda: run(False), accelerator="F5")
-runMenu.add_command(label="Stop", command=lambda: stop(process))
-runMenu.add_separator()
-runMenu.add_command(label="Start Debug", command=lambda: start_debug(False))
-runMenu.add_command(label="Step", command=lambda: step_debug(False))
-runMenu.add_command(label="Continue", command=lambda: continue_debug(False))
-runMenu.add_command(label="Stop Debug", command=lambda: stop_debug(False))
-menubar.add_cascade(label="Run", menu=runMenu)
-runMenu.entryconfigure(4, state='disabled')
-runMenu.entryconfigure(5, state='disabled')
-runMenu.entryconfigure(6, state='disabled')
+sketchMenu = tk.Menu(menubar, tearoff=False)
+sketchMenu.add_command(label="Compile", command=lambda: compile(False), accelerator="F5")
+sketchMenu.add_command(label="Stop", command=lambda: stop(process))
+sketchMenu.add_separator()
+sketchMenu.add_command(label="Upload", command=lambda: upload(False))
+sketchMenu.add_separator()
+sketchMenu.add_command(label="Start Debug", command=lambda: start_debug(False))
+sketchMenu.add_command(label="Step", command=lambda: step_debug(False))
+sketchMenu.add_command(label="Continue", command=lambda: continue_debug(False))
+sketchMenu.add_command(label="Stop Debug", command=lambda: stop_debug(False))
+menubar.add_cascade(label="Sketch", menu=sketchMenu)
+sketchMenu.entryconfigure(5, state='disabled')
+sketchMenu.entryconfigure(6, state='disabled')
+sketchMenu.entryconfigure(7, state='disabled')
 
-helpMenu = Menu(menubar, tearoff=False)
+helpMenu = tk.Menu(menubar, tearoff=False)
 helpMenu.add_command(label="Help", command=lambda: webbrowser.open("https://tamu.edu"))
 helpMenu.add_separator()
 helpMenu.add_command(label="About Us", command=about_us)
@@ -681,7 +745,7 @@ root.bind('<Control-Key-n>', new_file)
 root.bind('<Control-Key-o>', open_file)
 root.bind('<Control-Key-s>', save_file)
 root.bind('<Control-Key-f>', find_text)
-root.bind('<F5>', run)
+root.bind('<F5>', compile)
 root.bind('<Control-Key-p>', get_line_number())
 
 root.protocol("WM_DELETE_WINDOW", exit_app)
