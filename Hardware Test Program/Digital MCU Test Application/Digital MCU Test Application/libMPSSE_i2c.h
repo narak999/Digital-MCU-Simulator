@@ -30,7 +30,7 @@
 #ifndef LIBMPSSE_I2C_H
 #define LIBMPSSE_I2C_H
 
-#include "windows/ftd2xx.h"
+#include "ftd2xx.h"
 
 
 /******************************************************************************/

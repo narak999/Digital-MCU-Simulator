@@ -23,7 +23,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="pch.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test_code.c">
@@ -36,6 +36,11 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="libMPSSE.dll" />
+    <Library Include="libMPSSE.lib">
+      <Filter>Source Files</Filter>
+    </Library>
+    <Library Include="ftd2xx.lib">
+      <Filter>Source Files</Filter>
+    </Library>
   </ItemGroup>
 </Project>
