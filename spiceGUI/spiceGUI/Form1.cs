@@ -56,7 +56,7 @@ namespace spiceGUI
         private void button1_Click(object sender, EventArgs e)
         {
             string path = textBox3.Text;
-            string pathOut = path.Substring(0,path.Length - 4) + "out.cir.txt";
+            string pathOut = "..\\..\\..\\out\\out.cir";
             
 
             if (File.Exists(pathOut))
@@ -96,12 +96,14 @@ namespace spiceGUI
             System.IO.StreamReader fs = new System.IO.StreamReader(path);
             byte[] b = new byte[1024];
             UTF8Encoding temp = new UTF8Encoding(true);
-            string line;
+            string line = fs.ReadLine();
 
             //read line by line and add to list box
-            while ((line = fs.ReadLine()).Length > 0)
+            //while ((line = fs.ReadLine()).Length > 1)
+            while (line != null)
             {
                 listBox1.Items.Add(line);
+                line = fs.ReadLine();
             }
             generateComponentsList(listBox1);
             generateNodeList(listBox1);
@@ -109,7 +111,7 @@ namespace spiceGUI
         
         private void generateComponentsList(ListBox listBox)
         {
-            for(int i = 2; i<listBox.Items.Count; i++)
+            for(int i = 1; i<listBox.Items.Count-1; i++)
             {
                 string comp = listBox.Items[i].ToString().Substring(0, listBox.Items[i].ToString().IndexOf(' '));
                 if(!component.Contains(comp))
@@ -118,7 +120,7 @@ namespace spiceGUI
         }
         private void generateNodeList(ListBox listBox)
         {
-            for (int i = 2; i < listBox.Items.Count; i++)
+            for (int i = 1; i < listBox.Items.Count-1; i++)
             {
                 string firstword = listBox.Items[i].ToString().Substring(0, listBox.Items[i].ToString().IndexOf(' '));
                 string remainingSentence1 = listBox.Items[i].ToString().Substring(listBox.Items[i].ToString().IndexOf(' ')+1);
@@ -171,7 +173,7 @@ namespace spiceGUI
                 SetParent(proc.MainWindowHandle, this.Handle);
             }
             */
-            ExecuteCommand("gnome-terminal -x bash -ic 'ls; bash;'");
+            ExecuteCommand("gnome-terminal -x bash -ic 'ls; cd Digital-MCU-Simulator/spiceGUI/out/; ngspice out.cir bash;'");
         }
 
         public static void ExecuteCommand(string command)

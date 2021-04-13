@@ -1,0 +1,10 @@
+Source:
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\simple in\dual rc ladder.txt
+
+
+
+click get circuit
+
+create sample analysis
+
+click generate
