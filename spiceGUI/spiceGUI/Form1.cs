@@ -155,6 +155,7 @@ namespace spiceGUI
 
         private void button3_Click(object sender, EventArgs e)
         {
+            /*
             OpenFileDialog od = new OpenFileDialog();
             if(od.ShowDialog() == DialogResult.OK)
             {
@@ -168,6 +169,23 @@ namespace spiceGUI
                 }
 
                 SetParent(proc.MainWindowHandle, this.Handle);
+            }
+            */
+            ExecuteCommand("gnome-terminal -x bash -ic 'cd $HOME; ls; bash'");
+        }
+
+        public static void ExecuteCommand(string command)
+        {
+            Process proc = new System.Diagnostics.Process();
+            proc.StartInfo.FileName = "/bin/bash";
+            proc.StartInfo.Arguments = "-c \" " + command + " \"";
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.Start();
+
+            while (!proc.StandardOutput.EndOfStream)
+            {
+                Console.WriteLine(proc.StandardOutput.ReadLine());
             }
         }
     }
