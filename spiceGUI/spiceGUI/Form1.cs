@@ -171,7 +171,7 @@ namespace spiceGUI
                 SetParent(proc.MainWindowHandle, this.Handle);
             }
             */
-            ExecuteCommand("gnome-terminal -x bash -ic 'cd $HOME; ls; bash'");
+            ExecuteCommand("gnome-terminal -x bash -ic 'ls;'");
         }
 
         public static void ExecuteCommand(string command)
