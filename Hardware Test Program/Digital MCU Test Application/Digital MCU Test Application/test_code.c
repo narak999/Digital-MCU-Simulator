@@ -15,11 +15,12 @@ are adapted from sample code provided with the libMPSSE library.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "pch.h"
+//#include "pch.h"
 #ifdef _WIN32
 #include <windows.h> 
 #endif
 #include "libMPSSE_i2c.h"
+#include <unistd.h>
 
 #define I2C_DEVICE_BUFFER_SIZE
 #define CHANNEL_TO_OPEN 0 //should only need the first channel
@@ -71,18 +72,19 @@ static LARGE_INTEGER llFrequency = { 0 };
 #endif
 
 // FT2232HL Setup variables
-static uint32 numDevices;
-static uint32 deviceFlags;
-static uint32 deviceType;
-static uint32 deviceID;
-static uint32 deviceLocID;
+static unsigned int numDevices = 0;
+static unsigned int deviceFlags = 0;
+static unsigned int deviceType = 0;
+static unsigned int deviceID = 0;
+static unsigned int deviceLocID = 0;
 static char serial[16];
 static char description[64];
-static FT_HANDLE deviceHandle;
 
-static uint32 numI2Cchannels;
-static FT_HANDLE i2cChannel;
+static uint32 numI2Cchannels = 0;
 static ChannelConfig i2cConfig;
+
+FT_HANDLE deviceHandle;
+//FT_HANDLE i2cChanne l;
 
 
 // Standard Functions, adapted from example program (included in the github under libMPSSE/Samples
@@ -121,6 +123,7 @@ static FT_STATUS write_bytes(uint8 deviceAddress, uint8 registerAddress, uint8* 
 	uint32 options = 0;
 	uint32 trials = 0;
 
+	/*
 #if FAST_TRANSFER
 	options = I2C_TRANSFER_OPTIONS_START_BIT | I2C_TRANSFER_OPTIONS_STOP_BIT | I2C_TRANSFR_OPTIONS_FAST_TRANSFER_BYTES;
 #else
@@ -133,16 +136,43 @@ static FT_STATUS write_bytes(uint8 deviceAddress, uint8 registerAddress, uint8* 
 
 	// timing write procedure
 	start_time();
-	status = I2C_DeviceWrite(i2cChannel, deviceAddress, bytesToTransfer, buffer, &bytesTransferred, options);
+	status = I2C_DeviceWrite(deviceHandle, deviceAddress, bytesToTransfer, buffer, &bytesTransferred, options);
 	timeWrite = stop_time();
 
 	// if information isn't written, try until MAX_WRITE_TRIALS attempts have been made
 	while (status != FT_OK && trials < MAX_WRITE_TRIALS) {
 		start_time();
-		status = I2C_DeviceWrite(i2cChannel, deviceAddress, bytesToTransfer, buffer, &bytesTransferred, options);
+		status = I2C_DeviceWrite(deviceHandle, deviceAddress, bytesToTransfer, buffer, &bytesTransferred, options);
 		timeWrite = stop_time();
 		trials++;
 	}
+
+	*/
+	// above code uses libMPSSE_I2C functions, which gave me issues communicating with the devices. I'm going to reimplement them using ftd2xx commands, namely FT_Read and FT_Write. It'll be more complex but shouldn't be that difficult an aspect. 
+	
+	/* Order of operations
+	 * MSB First
+	 * pull SDA down before falling edge of clock (channel 18) -- MPSSE command should be 0x12 for Rising edge, with length = 0x00 and data = 0x00
+	 * send the following byte on rising clock edge
+	 * 	[deviceAddress << 1] ## 1 (device address needs to be 7 MSB, LSB is 1 for Write, 0 for Read ==> 0x10, 0x01, 0x00, deviceAddress << 1 + 1;
+	 * wait for ACK bit
+	 * send registerAddress byte ==> 0x10, 0x01, 0x00, registerAddress
+	 * wait for ACK bit
+	 * send data, one byte at a time, with an ACK wait between each byte ==> 0x10, 0x01, 0x00, data byte 1, ACK, 0x010, 0x01, 0x00, data byte 2, etc
+	 * stop write by pulling SDA high after rising clock edge -- MPSSE command should be 0x13, length = 0x00 and data = 0x01
+	 */
+
+	// pull SDA down
+	// format = 0x[command][length][data] = 0x120080 - 80 at the end because the MSB is sent first, so the data byte is 1000 0000
+	uint32 startData = 0x120080;
+	void * startDataPtr = (void*)&startData;
+	
+	unsigned int bytesWritten = 0;
+	// 3 is number of bytes to write
+	ftStatus = FT_Write(deviceHandle, startDataPtr, 3, &bytesWritten);
+
+	// sending device address
+	//uint32 
 
 	return status;
 
@@ -162,10 +192,10 @@ static FT_STATUS read_bytes(uint8 slaveAddress, uint8 registerAddress, uint8* da
 #else
 	options = I2C_TRANSFER_OPTIONS_START_BIT | I2C_TRANSFER_OPTIONS_STOP_BIT;
 #endif
-	status = I2C_DeviceRead(i2cChannel, slaveAddress, bytesToTransfer, buffer, &bytesTransferred, options);
+	//status = I2C_DeviceRead(deviceHandle, slaveAddress, bytesToTransfer, buffer, &bytesTransferred, options);
 	trials = 0;
 	while (status != FT_OK && trials < MAX_WRITE_TRIALS) {
-		status = I2C_DeviceRead(i2cChannel, slaveAddress, bytesToTransfer, buffer, &bytesTransferred, options);
+		//status = I2C_DeviceRead(deviceHandle, slaveAddress, bytesToTransfer, buffer, &bytesTransferred, options);
 		trials++;
 	}
 	return status;
@@ -222,7 +252,7 @@ uint16 read_ADC(int adc_pin) {
 		break;
 	}
 	if (channel == -1) {
-		printf("Specified pin is not an ADC Input. Please consult references and PCB Silkscreen");
+		printf("Specified pin is not an ADC Input. Please consult references and PCB Silkscreen\n");
 		return -1;
 	}
 	else {
@@ -522,13 +552,14 @@ static FT_STATUS set_pin_dir(int pin, bool dir) {
 	}
 	else if (pin <= 39) {
 		// if pin is on internal GPIO
+		// MPSSE Channel A, 
 	}
 	else {
 		printf("Cannot write on pin %d, out of range.", pin);
 	}
 }
 
-static start_library() {
+static void start_library() {
 	Init_libMPSSE();
 }
 
@@ -537,6 +568,8 @@ static void clean_library() {
 }
 
 int main() {
+
+	deviceHandle = malloc(sizeof(int));
 
 	// initializes variables for GPIO Expansion
 	// will be changed in write_GPIO function to change the ouptut
@@ -569,40 +602,188 @@ int main() {
 	// finally found a step-by-step guide for this device setup from FTDI. Awful documentation
 	
 	ftStatus = FT_Open(0, &deviceHandle);
-	/*
-	ftStatus = FT_ResetDevice(deviceHandle);
-	ftStatus = FT_SetUSBParameters(deviceHandle, 4096, 4096);	// input and output transfers will be 4 kiB large
-	ftStatus = FT_SetChars(deviceHandle, 0, 0, 0, 0);			// disables event and error characters, documentation is kind of unclear beyond "Most applications disable these"
-	ftStatus = FT_SetTimeouts(deviceHandle, 1000, 1000);		// sets a 1 second timeout on both reading and writing to the device
-	ftStatus = FT_SetLatencyTimer(deviceHandle, 50);			// Device will wait 50 ms before sending an incomplete USB packet back to the host computer. Will adjust based on latencies of host components.
-	ftStatus = FT_SetFlowControl(deviceHandle, FT_FLOW_RTS_CTS, 0x10, 0x13); // honestly not quite sure what this does, setup guide says I need it. Will do more research in the future
-	ftStatus = FT_SetBitMode(deviceHandle, 0, 0);
-	ftStatus = FT_SetBitMode(deviceHandle, 0, 0x2);	// 0x2 sets this device as an MPSSE device, for I2C and GPIO support, instead of the default serial interface. Pin directions will be set up later
-	*/
+	printf("ftStatus = %d after opening\n", ftStatus);
+	if (&deviceHandle == NULL) {
+		printf("Hey nerd the device handle is null\n");
+	}
+	printf("Device Handle = %p\n", deviceHandle);
+	// gets device handle correctly, need to figure out what the deal is
+	ftStatus |= FT_ResetDevice(deviceHandle);
+	ftStatus |= FT_SetUSBParameters(deviceHandle, 4096, 4096);	// input and output transfers will be 4 kiB large
+	ftStatus |= FT_SetChars(deviceHandle, 0, 0, 0, 0);			// disables event and error characters, documentation is kind of unclear beyond "Most applications disable these"
+	ftStatus |= FT_SetTimeouts(deviceHandle, 1000, 1000);		// sets a 1 second timeout on both reading and writing to the device
+	ftStatus |= FT_SetLatencyTimer(deviceHandle, 50);			// Device will wait 50 ms before sending an incomplete USB packet back to the host computer. Will adjust based on latencies of host components.
+	ftStatus |= FT_SetFlowControl(deviceHandle, FT_FLOW_RTS_CTS, 0x10, 0x13); // honestly not quite sure what this does, setup guide says I need it. Will do more research in the future
+	ftStatus |= FT_SetBitMode(deviceHandle, 0, 0);
+	ftStatus |= FT_SetBitMode(deviceHandle, 0, 0x2);	// 0x2 sets this device as an MPSSE device, for I2C and GPIO support, instead of the default serial interface. Pin directions will be set up later
 
-	// according to the libMPSSE manual initializing the I2C channel should do all of the above automatically.
-	ftStatus = I2C_GetNumChannels(&numI2Cchannels);
-	ftStatus = I2C_OpenChannel(0, i2cChannel);
-	ftStatus = I2C_InitChannel(i2cChannel, &i2cConfig);
-
+	printf("ftStatus = %d\n", ftStatus);
 	// configuring the MPSSE
 	// First, the start up guide suggests a test communication is sent with a deliberately bad command, and checking for the "bad command" return code.
 	// based on the list of available commands, 0xF0 should be a bad command.
 	uint8 testCommand = 0xf0;
-	uint8 returnFromTest = 0;
-	uint32 bytesWritten = 0;
-	uint32 bytesRead = 0;
+	unsigned int returnFromTest = 0;
+	unsigned int bytesWritten = 0;
+	unsigned int bytesRead = 0;
 	ftStatus = FT_Write(deviceHandle, (void*)&testCommand, 1, &bytesWritten);
 	// if the write was successful, read back
 	if (ftStatus == FT_OK) {
-		ftStatus = FT_Read(deviceHandle, (void*)&returnFromTest, 1, &bytesRead);
-		if (returnFromTest == 0xFA) {
-			printf("Test communciation successful!\n");
+		printf("Device successfully written to!\n");
+		ftStatus = FT_Read(deviceHandle, (void*)&returnFromTest, 5, &bytesRead);
+		if(ftStatus == FT_OK) {
+			printf("Read occurred successfully\n");
 		}
 		else {
-			printf("Test communication failed, please send help\n");
+			printf("something went wrong with the read\n");
+		}
+		printf("returnFromTest = %x\n", returnFromTest);
+		printf("bytesRead = %d\n", bytesRead);
+	}
+
+	// next, configure the MPSSE module
+
+
+	// according to the libMPSSE manual initializing the I2C channel should do all of the above automatically.
+	ftStatus = I2C_GetNumChannels(&numI2Cchannels);
+	printf("num channels = %lu\n", numI2Cchannels);
+
+	// test code, check channel info
+	FT_DEVICE_LIST_INFO_NODE devList;
+	if (numI2Cchannels > 0) {
+		for (int i = 0; i < numI2Cchannels; i++) {
+			ftStatus = I2C_GetChannelInfo(i, &devList);
+			printf("Information on channel number %d:\n", i);
+			printf("	Flags = 0x%x\n", devList.Flags);
+			printf("	Type = 0x%x\n", devList.Type);
+			printf("	ID = 0x%x\n", devList.ID);
+			printf("	LocID = 0x%x\n", devList.LocId);
+			printf("	SerialNumber = 0x%s\n", devList.SerialNumber);
+			printf("	Description = 0x%s\n", devList.Description);
+			printf("	ftHandle = 0x%p\n", devList.ftHandle);
 		}
 	}
+
+	// set up onboard GPIO default pin directions
+	// low four pins will be inputs by default, upper four pins will be outputs by default
+	// direction = 0xF0
+	// initial state = 0x00 // low outputs by default
+	// command = 0x82
+	uint32 dirCommand = 0xF00082;
+	void * dirCmdPtr = (void*)&dirCommand;
+	unsigned int bytesSent = 0;
+	FT_Write(deviceHandle, dirCmdPtr, 3, &bytesSent);
+
+
+	// send a test write to the GPIO Pins
+	// command: same command with same direction and different values
+	// sets pin 4/7 to high
+	dirCommand = 0xF01082;
+	dirCmdPtr = (void*)&dirCommand;
+	bytesSent = 0;
+	FT_Write(deviceHandle, dirCmdPtr, 3, &bytesSent);
+	printf("\n\n\nCheck for output on the GPIO pin\n");
+	printf("Press any key to continue...\n");
+	getchar();
+	
+	// second test write to the GPIO Pins
+	// command: same command with same direction and different values
+	// sets pin 4/7 to low
+	dirCommand = 0xF00082;
+	dirCmdPtr = (void*)&dirCommand;
+	bytesSent = 0;
+	FT_Write(deviceHandle, dirCmdPtr, 3, &bytesSent);
+	printf("\n\n\nCheck for output on the GPIO pin\n");
+	printf("Press any key to continue...\n");
+	getchar();
+	/*
+	
+	//sends a test loop for GPIO high/low pulses with a period of 2 seconds for 10 full cycles
+	for (int i = 0; i < 10; i++) {
+		dirCommand = 0xF01082;
+		dirCmdPtr = (void*)&dirCommand;
+		bytesSent = 0;
+		FT_Write(deviceHandle, dirCmdPtr, 3, &bytesSent);
+		printf("Running output cycle %d...\n", i);
+
+		sleep(1);
+
+		dirCommand = 0xF00082;
+		dirCmdPtr = (void*)&dirCommand;
+		bytesSent = 0;
+		FT_Write(deviceHandle, dirCmdPtr, 3, &bytesSent);
+
+		sleep(1);
+
+	}
+	*/
+
+	dirCommand = 0xF01082;
+	dirCmdPtr = (void*)&dirCommand;
+	bytesSent = 0;
+	FT_Write(deviceHandle, dirCmdPtr, 3, &bytesSent);
+	printf("Testing GPIO input...\n");
+
+	dirCommand = 0x83;
+	dirCmdPtr = (void*)&dirCommand;
+	bytesSent = 0;
+	ftStatus = FT_Write(deviceHandle, dirCmdPtr, 1, &bytesSent);
+	printf("ftStatus = %d\n", ftStatus);
+
+	//sleep(1); // making sure that the command processes, don't know the latency of the connection
+
+	unsigned int returnVal = 0;
+	void* returnPtr = (void *)&returnPtr;
+	unsigned int bytesReceived = 0;
+	
+	ftStatus = FT_Read(deviceHandle, returnPtr, 3, &bytesReceived);
+	printf("ftStatus = %d\n", ftStatus);
+	printf("Return Value: 0x%x\n", returnVal);
+	printf("bytes received: 0x%x\n", bytesReceived);
+	
+	dirCommand = 0x81;
+	dirCmdPtr = (void*)&dirCommand;
+	bytesSent = 0;
+	ftStatus = FT_Write(deviceHandle, dirCmdPtr, 1, &bytesSent);
+	printf("ftStatus = %d\n", ftStatus);
+
+	//sleep(1); // making sure that the command processes, don't know the latency of the connection
+
+	returnVal = 0;
+	returnPtr = (void *)&returnPtr;
+	bytesReceived = 0;
+	
+	ftStatus = FT_Read(deviceHandle, returnPtr, 3, &bytesReceived);
+	printf("ftStatus = %d\n", ftStatus);
+	printf("Return Value: 0x%x\n", returnVal);
+	printf("bytes received: 0x%x\n", bytesReceived);
+	getchar();
+
+
+
+
+
+	/*
+	int channelOpenAttempts = 0;
+	while(channelOpenAttempts < 10) {
+		ftStatus = I2C_OpenChannel(0, deviceHandle);
+		if (ftStatus == FT_OK)
+			break;
+		channelOpenAttempts = channelOpenAttempts + 1;
+	}
+	if(ftStatus == FT_OK) {
+		printf("Channel opened OK\n");
+		printf("Channel Handle = %p\n", deviceHandle);
+	}
+	int channelConfigAttempts = 0;
+	while(channelConfigAttempts < 10) {
+		ftStatus = I2C_InitChannel(deviceHandle, &i2cConfig);
+		if (ftStatus == FT_OK)
+			break;
+		channelConfigAttempts = channelConfigAttempts + 1;
+	}
+	if(ftStatus == FT_OK) 
+		printf("Channel configured OK\n");
+	*/
 
 
 	
@@ -629,12 +810,13 @@ int main() {
 	uint16 adc_config = 0x0FF8;
 	void* adc_config_ptr = (void*)&adc_config;
 	// writes config to ADC
-	write_bytes(ADC_ADR, ADC_CONF_REG, (uint8*)adc_config_ptr, 2);
+	//write_bytes(ADC_ADR, ADC_CONF_REG, (uint8*)adc_config_ptr, 2);
+	
 
 	/*
 											DAC Configuration
 	-----------------------------------------------------------------------------------------------------------
-	Configures the AD56914 DAC to function as intended
+	Configures the AD5691 DAC to function as intended
 	5 control bits, need to write 2 bytes, control bits are 5 MSB in high byte
 	from MSB to LSB of control bits, we have
 	Reset	- Resets DAC, good practice to reset on initialization
@@ -649,7 +831,16 @@ int main() {
 	*/
 	uint16 dac_config = 0x8000;
 	void* dac_config_ptr = (void*)&dac_config;
-	write_bytes(DAC_ADR, DAC_CONF_REG, (uint8*)dac_config_ptr, 2);
+	//write_bytes(DAC_ADR, DAC_CONF_REG, (uint8*)dac_config_ptr, 2);
+	if(ftStatus != FT_OK) {
+		printf("ftStatus is not ok, something went wrong (before)\n");
+		printf("ftStatus = %x\n", ftStatus);
+	}
+	//write_DAC(2048);
+	if(ftStatus != FT_OK) {
+		printf("ftStatus is not ok, something went wrong (after) \n");
+		printf("ftStatus = %x\n", ftStatus);
+	}
 
 	/*
 											GPIO Configuration
@@ -657,7 +848,7 @@ int main() {
 	Configures the MCP2017 I/O Expanders to function as intended
 	*/
 
-		
+	/*	
 	// Set up default configuration values in IOCON (configuration) register
 	// Due to default value, this should be at address 0A. After this configuration is sent, it will be at 05.
 	uint8 gpio_config_adr = 0x0A;
@@ -677,5 +868,11 @@ int main() {
 	ftStatus = read_bytes(GPIO_EX_1_ADR, GPIO_EX_BANK_B_VAL, &gpio1_b_val, 1);
 	ftStatus = read_bytes(GPIO_EX_2_ADR, GPIO_EX_BANK_A_VAL, &gpio1_a_val, 1);
 	ftStatus = read_bytes(GPIO_EX_2_ADR, GPIO_EX_BANK_B_VAL, &gpio1_b_val, 1);
+	*/
+
+	// close the channel
+	ftStatus = FT_Close(deviceHandle);
+	
+
 
 }

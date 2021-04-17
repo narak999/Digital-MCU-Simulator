@@ -1,0 +1,2 @@
+ gcc -m32 -o test test_code.c -L . -lMPSSE -lftd2xx -lpthread -ldl
+
