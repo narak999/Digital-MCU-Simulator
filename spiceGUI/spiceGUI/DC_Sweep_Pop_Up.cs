@@ -46,7 +46,7 @@ namespace spiceGUI
             string VStart = textBox1.Text;
             string VStop = textBox2.Text;
             string Vincr = textBox3.Text;
-            listbox.Items.Add("dc " + comp + "  " + VStart + " " + VStop + " " + Vincr + "\n");
+            listbox.Items.Add("dc " + comp + "  " + VStart + " " + VStop + " " + Vincr);
         }
     }
 }

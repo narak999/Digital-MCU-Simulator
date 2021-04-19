@@ -48,10 +48,20 @@ namespace spiceGUI
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            N1 = comboBox3.GetItemText(comboBox3.SelectedItem);
+            //N1 = comboBox3.GetItemText(comboBox3.SelectedItem);
         }
 
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           // N2 = comboBox4.GetItemText(comboBox4.SelectedItem);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            N1 = comboBox3.GetItemText(comboBox3.SelectedItem);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
         {
             N2 = comboBox4.GetItemText(comboBox4.SelectedItem);
         }
