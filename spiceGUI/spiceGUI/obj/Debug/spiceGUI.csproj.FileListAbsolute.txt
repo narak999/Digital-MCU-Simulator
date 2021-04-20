@@ -1,0 +1,28 @@
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\bin\Debug\spiceGUI.exe.config
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\bin\Debug\spiceGUI.exe
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\bin\Debug\spiceGUI.pdb
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\obj\Debug\spiceGUI.csprojAssemblyReference.cache
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\obj\Debug\spiceGUI.Form1.resources
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\obj\Debug\spiceGUI.Properties.Resources.resources
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\obj\Debug\spiceGUI.csproj.GenerateResource.cache
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\obj\Debug\spiceGUI.csproj.CoreCompileInputs.cache
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\obj\Debug\spiceGUI.exe
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\obj\Debug\spiceGUI.pdb
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\obj\Debug\spiceGUI.AC_Small__Signal_Pop_Up.resources
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\obj\Debug\spiceGUI.DC_Sweep_Pop_Up.resources
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\obj\Debug\spiceGUI.Plot_Pop_Up.resources
+C:\Users\wtfjo\source\repos\spiceGUI\spiceGUI\obj\Debug\spiceGUI.Edit_Source_Item_Pop_Up.resources
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\bin\Debug\spiceGUI.exe.config
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\bin\Debug\spiceGUI.exe
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\bin\Debug\spiceGUI.pdb
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\obj\Debug\spiceGUI.csprojAssemblyReference.cache
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\obj\Debug\spiceGUI.AC_Small__Signal_Pop_Up.resources
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\obj\Debug\spiceGUI.DC_Sweep_Pop_Up.resources
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\obj\Debug\spiceGUI.Edit_Source_Item_Pop_Up.resources
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\obj\Debug\spiceGUI.Form1.resources
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\obj\Debug\spiceGUI.Plot_Pop_Up.resources
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\obj\Debug\spiceGUI.Properties.Resources.resources
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\obj\Debug\spiceGUI.csproj.GenerateResource.cache
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\obj\Debug\spiceGUI.csproj.CoreCompileInputs.cache
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\obj\Debug\spiceGUI.exe
+C:\Users\wtfjo\OneDrive - Texas A&M University\Documents\GitHub\Digital-MCU-Simulator\spiceGUI\spiceGUI\obj\Debug\spiceGUI.pdb

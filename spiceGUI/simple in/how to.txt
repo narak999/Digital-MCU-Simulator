@@ -1,0 +1,10 @@
+Source:
+..\..\..\simple in\dual rc ladder.txt
+
+
+
+click get circuit
+
+create sample analysis
+
+click generate
