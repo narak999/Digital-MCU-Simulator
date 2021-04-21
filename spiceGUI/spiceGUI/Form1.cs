@@ -173,7 +173,7 @@ namespace spiceGUI
                 SetParent(proc.MainWindowHandle, this.Handle);
             }
             */
-            ExecuteCommand("gnome-terminal -x bash -ic 'ls; cd Digital-MCU-Simulator/spiceGUI/out/; ngspice out.cir bash;'");
+            ExecuteCommand("gnome-terminal -x bash -ic 'ls; cd ~/Digital-MCU-Simulator/spiceGUI/out/; ngspice out.cir bash;'");
         }
 
         public static void ExecuteCommand(string command)
