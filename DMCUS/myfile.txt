@@ -1,9 +1,3 @@
-SPICE Netlist
-
-*
-*DMCUS SPICE Netlist
-*
-*
-
-* --- Circuit Topology ---
-
+.title random
+R3 10 10 10
+.end

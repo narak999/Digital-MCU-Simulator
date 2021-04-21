@@ -130,13 +130,17 @@ void MainWindow::createActions()
     indAct->setStatusTip("Enables Inductor Paintings");
     connect(indAct, SIGNAL(triggered()), this, SLOT(setIndMode()));
 
-    wireAct = new QAction(QIcon(":/bitmaps/bitmaps/wire.png"), "Build Wires", this);
-    wireAct->setStatusTip("Enables Wire Paintings");
+    wireAct = new QAction(QIcon(":/resources/icons/battery.png"), "Build Wires", this);
+    wireAct->setStatusTip("Creates a source");
     connect(wireAct, SIGNAL(triggered()), this, SLOT(setWireMode()));
 
     codeAct = new QAction(QIcon(":/bitmaps/bitmaps/code.png"), "Build Wires", this);
     codeAct->setStatusTip("Opens the IDE for microcontroller programming");
     connect(codeAct, SIGNAL(triggered()), this, SLOT(openIDE()));
+
+    genNetlist = new QAction(QIcon(":/resources/icons/netlist.png"), "Generate Netlist", this);
+    genNetlist->setStatusTip("Generates a SPICE Netlist");
+    connect(genNetlist, SIGNAL(triggered()), this, SLOT(getNetlist()));
 
     //View Menu
     zoomResetAct = new QAction(QIcon(":/resources/icons/zoomMax.png"), "View 1:1", this);
@@ -232,6 +236,7 @@ void MainWindow::createToolbar()
     editToolbar->addAction(indAct);
     editToolbar->addAction(wireAct);
     editToolbar->addAction(codeAct);
+    editToolbar->addAction(genNetlist);
 }
 
 void MainWindow::createDockWindow()
@@ -317,9 +322,14 @@ void MainWindow::fillCompBox()
 void MainWindow::setResMode()
 {
     Component newComponent;
-    newComponent.value = 100 + resCounter;
+    bool ok;
+    newComponent.name = QInputDialog::getText(this, "Resistor Name", "Name:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.n1 = QInputDialog::getText(this, "Node 1", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.n2 = QInputDialog::getText(this, "Node 2", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.value = QInputDialog::getText(this, "Resistor Value", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.isSource = false;
     QString s = QString::number(resCounter + 1);
-    newComponent.name = "R" + s;
+    newComponent.netName = "R" + s;
     resCounter++;
     comps.append(newComponent);
     for (int i = 0; i < comps.size(); i++){
@@ -330,9 +340,14 @@ void MainWindow::setResMode()
 void MainWindow::setCapMode()
 {
     Component newComponent;
-    newComponent.value = 100 + capCounter;
+    bool ok;
+    newComponent.name = QInputDialog::getText(this, "Capacitor Name", "Name:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.n1 = QInputDialog::getText(this, "Node 1", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.n2 = QInputDialog::getText(this, "Node 2", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.value = QInputDialog::getText(this, "Capacitor Value", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.isSource = false;
     QString s = QString::number(capCounter + 1);
-    newComponent.name = "C" + s;
+    newComponent.netName = "C" + s;
     capCounter++;
     comps.append(newComponent);
     for (int i = 0; i < comps.size(); i++){
@@ -342,26 +357,73 @@ void MainWindow::setCapMode()
 
 void MainWindow::setIndMode()
 {
-
+    Component newComponent;
+    bool ok;
+    newComponent.value = QInputDialog::getText(this, "Inductor Value", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.name = QInputDialog::getText(this, "Inductor Name", "Name:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.n1 = QInputDialog::getText(this, "Node 1", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.n2 = QInputDialog::getText(this, "Node 2", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.isSource = false;
+    QString s = QString::number(indCounter + 1);
+    newComponent.netName = "L" + s;
+    indCounter++;
+    comps.append(newComponent);
 }
 
 void MainWindow::setGNDMode()
 {
-
+    //QString v1, v2, td1, td2, tau1, tau2, pw, period, v_offset, v_peak, f, df, phase;
 }
 
 void MainWindow::setWireMode()
 {
+    Component newComponent;
+    bool ok;
+    newComponent.name = QInputDialog::getText(this, "Source Name", "Name:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.posNode = QInputDialog::getText(this, "Positive Node", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.negNode = QInputDialog::getText(this, "Negative Node", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.srcType = QInputDialog::getText(this, "Source type", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    newComponent.isSource = true;
+    QString s = QString::number(srcCounter + 1);
+    newComponent.netName = "V" + s;
 
-
+    if(newComponent.srcType == "DC"){
+        newComponent.v1 = QInputDialog::getText(this, "Voltage", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    }
+    else if(newComponent.srcType == "EXP"){
+        newComponent.v1 = QInputDialog::getText(this, "Initial Voltage", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.v2 = QInputDialog::getText(this, "Pulsed Value", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.td1 = QInputDialog::getText(this, "Rise Delay Time", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.tau1 = QInputDialog::getText(this, "Rise Time Constant", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.td2 = QInputDialog::getText(this, "Fall Delay Time", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.tau2 = QInputDialog::getText(this, "Fall Time Constant", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    }
+    else if(newComponent.srcType == "PULSE"){
+        newComponent.v1 = QInputDialog::getText(this, "First Value", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.v2 = QInputDialog::getText(this, "Second Value", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.td1 = QInputDialog::getText(this, "Delay Time", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.tr = QInputDialog::getText(this, "Rise Time", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.td2 = QInputDialog::getText(this, "Fall Time", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.pw = QInputDialog::getText(this, "Pulse Width", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.period = QInputDialog::getText(this, "Period", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    }
+   else if(newComponent.srcType == "SIN"){
+        newComponent.v_offset = QInputDialog::getText(this, "Voltage Offset", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.v_peak = QInputDialog::getText(this, "Amplitude", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.f = QInputDialog::getText(this, "Frequency", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.td1 = QInputDialog::getText(this, "Time Delay", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.df = QInputDialog::getText(this, "Damping Factor", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+        newComponent.phase = QInputDialog::getText(this, "Phase", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    }
+    srcCounter++;
+    comps.append(newComponent);
 }
 
 void MainWindow::openIDE()
 {
-    QProcess *process = new QProcess(this);
-    QString file("\"/home/ak/Downloads/dist/DMCUS_IDE/DMCUS_IDE\"");
-    //QMessageBox::about(this, "Test", file);
-    QProcess::startDetached("\"/home/ak/Downloads/dist/DMCUS_IDE/DMCUS_IDE\"");
+    //QProcess *process = new QProcess(this);
+    QString file("\"/home/ak/Desktop/DMCUS/DMCUS/dist/DMCUS_IDE/DMCUS_IDE\"");
+    QProcess::startDetached("\"/home/ak/Desktop/DMCUS/DMCUS/dist/DMCUS_IDE/DMCUS_IDE\"");
 }
 
 void MainWindow::setLayout()
@@ -371,18 +433,13 @@ void MainWindow::setLayout()
 
 void MainWindow::newFile()
 {
-    QVector<int> resVals;
-    QVector<QString> resName;
+    comps.clear();
+}
+
+void MainWindow::getNetlist()
+{
     bool ok;
-
-    do{
-        double n = QInputDialog::getDouble(this, "Resistor Value", "Value:", 0, 0, 100, 1, &ok);
-        QString string = QInputDialog::getText(this, "Resistor Name", "Name:", QLineEdit::Normal, QDir::home().dirName(), &ok);
-        resVals.append(n);
-        resName.append(string);
-    } while(ok);
-
-    QFile file("/home/ak/Desktop/DMCUS/DMCUS/myfile.txt");
+    QFile file("/home/ak/Desktop/DMCUS/DMCUS/netlist.txt");
 
     if(!file.open(QFile::WriteOnly | QFile::Text))
     {
@@ -390,23 +447,62 @@ void MainWindow::newFile()
     }
 
     QTextStream out(&file);
-    out << "SPICE Netlist" << Qt::endl << Qt::endl;
-    out << "*" << Qt::endl << "*DMCUS SPICE Netlist" << Qt::endl;
-    out << "*" << Qt::endl << "*" << Qt::endl << Qt::endl << "* --- Circuit Topology ---" << Qt::endl << Qt::endl;
+    QString netTitle = QInputDialog::getText(this, "Netlist title", "Value:", QLineEdit::Normal, QDir::home().dirName(), &ok);
+    out << QString(".title %1").arg(netTitle) << Qt::endl;
 
-    bool netlist = true;
-
-    if (netlist){
-        for (int i = 0; i < resVals.size() - 1; ++i){
-            out << "* Component: " << resName[i] << Qt::endl;
-            out << "r" << resName[i] << " 1 2 " << resVals[i] << Qt::endl << Qt::endl;
+    for (int i = 0; i < comps.size(); ++i){
+        if(comps[i].isSource){
+            if (comps[i].srcType == "DC"){
+                QString s = QString("%1 %2 %3")
+                            .arg(comps[i].posNode)
+                            .arg(comps[i].negNode)
+                            .arg(comps[i].v1);
+                out << comps[i].name << " " << s << Qt::endl;
+            }
+            else if(comps[i].srcType == "EXP"){
+                QString s = QString("%1 %2 %3(%5 %6 %7 %8)")
+                            .arg(comps[i].posNode)
+                            .arg(comps[i].negNode)
+                            .arg(comps[i].srcType)
+                            .arg(comps[i].v1)
+                            .arg(comps[i].v2)
+                            .arg(comps[i].td1)
+                            .arg(comps[i].tau1);
+                out << comps[i].name << " " << s << Qt::endl;
+            }
+            else if(comps[i].srcType == "PULSE"){
+                QString s = QString("%1 %2 dc 0 %3(%4 %5 %6 %7 %8 %9 %10)")
+                            .arg(comps[i].posNode)
+                            .arg(comps[i].negNode)
+                            .arg(comps[i].srcType)
+                            .arg(comps[i].v1)
+                            .arg(comps[i].v2)
+                            .arg(comps[i].td1)
+                            .arg(comps[i].tr)
+                            .arg(comps[i].td2)
+                            .arg(comps[i].pw)
+                            .arg(comps[i].period);
+                out << comps[i].name << " " << s << Qt::endl;
+            }
+            else if(comps[i].srcType == "SIN"){
+                QString s = QString("%1 %2 %3(%4 %5 %6)")
+                            .arg(comps[i].posNode)
+                            .arg(comps[i].negNode)
+                            .arg(comps[i].srcType)
+                            .arg(comps[i].v_offset)
+                            .arg(comps[i].v_peak)
+                            .arg(comps[i].f)
+                            .arg(comps[i].td1)
+                            .arg(comps[i].df)
+                            .arg(comps[i].phase);
+                out << comps[i].name << " " << s << Qt::endl;
+            }
+        }
+        else {
+            out << comps[i].name << QString(" %1 %2 ").arg(comps[i].n1).arg(comps[i].n2) << comps[i].value << Qt::endl;
         }
     }
-}
-
-void MainWindow::getNetlist()
-{
-
+out << ".end";
 }
 
 void MainWindow::newText()
@@ -501,5 +597,5 @@ void MainWindow::projButtonNew()
 
 void MainWindow::aboutQt()
 {
-    QMessageBox::aboutQt(this);
+QMessageBox::aboutQt(this);
 }

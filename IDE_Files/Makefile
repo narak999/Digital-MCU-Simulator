@@ -3,7 +3,7 @@ CFLAGS=-Wall -gdwarf-2 -Os -std=gnu99 -DF_CPU=8000000 -fno-inline-small-function
 CC=avr-gcc
 OBJCOPY=avr-objcopy
 
-TARGET=ledblink2
+TARGET=ledblink
 
 $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -j .text -j .data -j .eeprom -O ihex $(TARGET).elf $(TARGET).hex
