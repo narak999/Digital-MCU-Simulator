@@ -19,8 +19,8 @@ are adapted from sample code provided with the libMPSSE library.
 #ifdef _WIN32
 #include <windows.h> 
 #endif
-#include "libMPSSE_i2c.h"
 #include <unistd.h>
+#include "ftd2xx.h"
 
 #define I2C_DEVICE_BUFFER_SIZE
 #define CHANNEL_TO_OPEN 0 //should only need the first channel
@@ -51,20 +51,20 @@ are adapted from sample code provided with the libMPSSE library.
 // val variables store the value of the 8 bits of that GPIO bank
 // dir variables store the direction of the 8 bits of that GPIO bank
 // *never* change a variable without reading from the GPIO bank first, slower but safer
-static uint8 gpio1_a_val;
-static uint8 gpio1_b_val;
-static uint8 gpio2_a_val;
-static uint8 gpio2_b_val;
-static uint8 gpio1_a_dir;
-static uint8 gpio1_b_dir;
-static uint8 gpio2_a_dir;
-static uint8 gpio2_b_dir;
-static uint8 int_gpio_val;
-static uint8 int_gpio_dir;
+static unsigned char gpio1_a_val;
+static unsigned char gpio1_b_val;
+static unsigned char gpio2_a_val;
+static unsigned char gpio2_b_val;
+static unsigned char gpio1_a_dir;
+static unsigned char gpio1_b_dir;
+static unsigned char gpio2_a_dir;
+static unsigned char gpio2_b_dir;
+static unsigned char int_gpio_val;
+static unsigned char int_gpio_dir;
 static FT_STATUS ftStatus;
-static uint8 buffer[I2C_DEVICE_BUFFER_SIZE] = { 0 };
-static uint32 timeWrite = 0;
-static uint32 timeRead = 0;
+static unsigned char buffer[I2C_DEVICE_BUFFER_SIZE] = { 0 };
+static unsigned long int timeWrite = 0;
+static unsigned long int timeRead = 0;
 #ifdef _WIN32
 static LARGE_INTEGER llTimeStart = { 0 };
 static LARGE_INTEGER llTimeEnd = { 0 };
@@ -80,8 +80,8 @@ static unsigned int deviceLocID = 0;
 static char serial[16];
 static char description[64];
 
-static uint32 numI2Cchannels = 0;
-static ChannelConfig i2cConfig;
+static unsigned long int numI2Cchannels = 0;
+//static ChannelConfig i2cConfig;
 
 FT_HANDLE deviceHandle;
 //FT_HANDLE i2cChanne l;
@@ -104,24 +104,24 @@ static void start_time() {
 }
 
 // stops timer
-static uint32 stop_time() {
-	uint32 dwTemp = 0;
+static unsigned long int stop_time() {
+	unsigned long int dwTemp = 0;
 #ifdef _WIN32
 	QueryPerformanceCounter(&llTimeEnd);
-	dwTemp = (uint32)((llTimeEnd.QuadPart - llTimeStart.QuadPart) * 1000 / (float)llFrequency.QuadPart);
+	dwTemp = (unsigned long int)((llTimeEnd.QuadPart - llTimeStart.QuadPart) * 1000 / (float)llFrequency.QuadPart);
 #endif
 	return dwTemp;
 }
 
 // Writes to I2C device
 // sample code writes to a 24LC024H EEPROM, will be used for several devices
-static FT_STATUS write_bytes(uint8 deviceAddress, uint8 registerAddress, uint8* data, uint32 numBytes) {
+static FT_STATUS write_bytes(unsigned char deviceAddress, unsigned char registerAddress, unsigned char* data, unsigned long int numBytes) {
 	
 	FT_STATUS status;
-	uint32 bytesToTransfer = 0;
-	uint32 bytesTransferred = 0;
-	uint32 options = 0;
-	uint32 trials = 0;
+	unsigned long int bytesToTransfer = 0;
+	unsigned long int bytesTransferred = 0;
+	unsigned long int options = 0;
+	unsigned long int trials = 0;
 
 	/*
 #if FAST_TRANSFER
@@ -164,7 +164,7 @@ static FT_STATUS write_bytes(uint8 deviceAddress, uint8 registerAddress, uint8* 
 
 	// pull SDA down
 	// format = 0x[command][length][data] = 0x120080 - 80 at the end because the MSB is sent first, so the data byte is 1000 0000
-	uint32 startData = 0x120080;
+	unsigned long int startData = 0x120080;
 	void * startDataPtr = (void*)&startData;
 	
 	unsigned int bytesWritten = 0;
@@ -172,22 +172,23 @@ static FT_STATUS write_bytes(uint8 deviceAddress, uint8 registerAddress, uint8* 
 	ftStatus = FT_Write(deviceHandle, startDataPtr, 3, &bytesWritten);
 
 	// sending device address
-	//uint32 
+	//unsigned long int 
 
 	return status;
 
 }
 
 // reads from I2C device
-static FT_STATUS read_bytes(uint8 slaveAddress, uint8 registerAddress, uint8* data, uint32 numBytes) {
+static FT_STATUS read_bytes(unsigned char slaveAddress, unsigned char registerAddress, unsigned char* data, unsigned long int numBytes) {
 	
 	FT_STATUS status = FT_OK;
-	uint32 bytesToTransfer = 0;
-	uint32 bytesTransferred = 0;
-	uint32 options = 0;
-	uint32 trials = 0;
+	unsigned long int bytesToTransfer = 0;
+	unsigned long int bytesTransferred = 0;
+	unsigned long int options = 0;
+	unsigned long int trials = 0;
 
-#if FAST_TRANSFER
+//#if FAST_TRANSFER
+	/*
 	options = I2C_TRANSFER_OPTIONS_START_BIT | I2C_TRANSFER_OPTIONS_STOP_BIT | I2C_TRANSFR_OPTIONS_FAST_TRANSFER_BYTES;
 #else
 	options = I2C_TRANSFER_OPTIONS_START_BIT | I2C_TRANSFER_OPTIONS_STOP_BIT;
@@ -198,10 +199,11 @@ static FT_STATUS read_bytes(uint8 slaveAddress, uint8 registerAddress, uint8* da
 		//status = I2C_DeviceRead(deviceHandle, slaveAddress, bytesToTransfer, buffer, &bytesTransferred, options);
 		trials++;
 	}
+	*/
 	return status;
 }
 
-uint16 read_ADC(int adc_pin) {
+unsigned int read_ADC(int adc_pin) {
 	// reads the voltage on the ADC from the I2C bus and returns it as an integer
 
 	/* ADC Channel-Pin Mapping
@@ -263,11 +265,11 @@ uint16 read_ADC(int adc_pin) {
 		*/
 
 		// register bitmask
-		uint8 adc_register = ((0b1000 | channel) << 4);
+		unsigned char adc_register = ((0b1000 | channel) << 4);
 		// need to reserve 2 bytes of space, but send the data location as a pointer to 1 byte of space, kind of hacky tbh
-		uint16 value = 0;
+		unsigned int value = 0;
 		void* val_ptr = (void*)&value;
-		ftStatus = read_bytes(ADC_ADR, adc_register, (uint8*)val_ptr, 2);
+		ftStatus = read_bytes(ADC_ADR, adc_register, (unsigned char*)val_ptr, 2);
 		// this might need to be swapped, should return MSB first then LSB. TBD
 		return value;
 
@@ -275,17 +277,17 @@ uint16 read_ADC(int adc_pin) {
 
 }
 
-void write_DAC(uint16 value) {
+void write_DAC(unsigned int value) {
 	// writes a value to the DAC to output it. Double check input size on this
 	// use the "Write DAC and input registers" command, = 0011xxxx
-	uint16 write_value = value << 4; // DAC reads from the 12 MSB of the two bytes, and the bottom 4 bits are don't cares. This positions the value as expected.
+	unsigned int write_value = value << 4; // DAC reads from the 12 MSB of the two bytes, and the bottom 4 bits are don't cares. This positions the value as expected.
 	// hacky stuff, see ADC write code
 	void* val_ptr = (void*)&write_value;
 	// just as with ADC, might need to swap order of bytes in write_value. Endianness tbd
-	ftStatus = write_bytes(DAC_ADR, 0x30, (uint8*)val_ptr, 2);
+	ftStatus = write_bytes(DAC_ADR, 0x30, (unsigned char*)val_ptr, 2);
 }
 
-bool write_GPIO(int line, bool value) {
+unsigned char write_GPIO(int line, unsigned char value) {
 	// sets the value on a GPIO line to high (true) or low (false) voltage
 	// returns true if successful, false if not
 	//
@@ -337,7 +339,7 @@ bool write_GPIO(int line, bool value) {
 		}
 
 		// create I2C Byte Buffer
-		uint8 data_send = 0;
+		unsigned char data_send = 0;
 		if (line > 7) {
 			write_bytes(GPIO_EX_1_ADR, GPIO_EX_BANK_B_VAL, &gpio1_b_val, 1);
 			return 1;
@@ -386,7 +388,7 @@ bool write_GPIO(int line, bool value) {
 			}
 		}
 		// create I2C Byte Buffer
-		uint8 data_send = 0;
+		unsigned char data_send = 0;
 		if (line2 > 7) {
 			write_bytes(GPIO_EX_2_ADR, GPIO_EX_BANK_B_VAL, &gpio2_b_val, 1);
 			return 1;
@@ -408,7 +410,7 @@ bool write_GPIO(int line, bool value) {
 		}
 
 		// TODO: find out what handles are here. Should be in d2xx files
-		ftStatus = FT_WriteGPIO(deviceHandle, int_gpio_dir, (uint8)value);
+		//ftStatus = FT_WriteGPIO(deviceHandle, int_gpio_dir, (unsigned char)value);
 		return 1;
 	}
 	else {
@@ -418,7 +420,7 @@ bool write_GPIO(int line, bool value) {
 
 }
 
-bool read_GPIO(int line) {
+unsigned char read_GPIO(int line) {
 
 	/*
 	line numbers:
@@ -431,7 +433,7 @@ bool read_GPIO(int line) {
 		* Change DIR to be able to read from the pin
 		* Write
 	 */
-	uint8 adr = 0;
+	unsigned char adr = 0;
 	if (line < 0) {
 		printf("Line must be a positive value");
 		return 0;
@@ -449,7 +451,7 @@ bool read_GPIO(int line) {
 		offset = 8;
 	}
 
-	uint8 bitmask = 1 << (line2 - offset);
+	unsigned char bitmask = 1 << (line2 - offset);
 
 	if (line <= 15) {
 		// read from GPIO values
@@ -477,7 +479,7 @@ bool read_GPIO(int line) {
 	
 }
 
-static FT_STATUS set_pin_dir(int pin, bool dir) {
+static FT_STATUS set_pin_dir(int pin, unsigned char dir) {
 	/* pin directions:
 	
 		* To read from the pin, dir = READ
@@ -558,6 +560,7 @@ static FT_STATUS set_pin_dir(int pin, bool dir) {
 		printf("Cannot write on pin %d, out of range.", pin);
 	}
 }
+/*
 
 static void start_library() {
 	Init_libMPSSE();
@@ -566,6 +569,7 @@ static void start_library() {
 static void clean_library() {
 	Cleanup_libMPSSE();
 }
+*/
 
 int main() {
 
@@ -583,9 +587,9 @@ int main() {
 	gpio2_a_dir = 0;
 	gpio2_b_dir = 0;
 	int_gpio_dir = 0x55; // internal GPIO pins will alternate in/out in/out. 1 is an output, 0 is an input
-	i2cConfig.ClockRate = I2C_CLOCK_STANDARD_MODE;
+	/*i2cConfig.ClockRate = I2C_CLOCK_STANDARD_MODE;
 	i2cConfig.LatencyTimer = 250;
-	i2cConfig.Options = 0;
+	i2cConfig.Options = 0;*/
 
 	ftStatus = 0;
 
@@ -621,7 +625,7 @@ int main() {
 	// configuring the MPSSE
 	// First, the start up guide suggests a test communication is sent with a deliberately bad command, and checking for the "bad command" return code.
 	// based on the list of available commands, 0xF0 should be a bad command.
-	uint8 testCommand = 0xf0;
+	unsigned char testCommand = 0xf0;
 	unsigned int returnFromTest = 0;
 	unsigned int bytesWritten = 0;
 	unsigned int bytesRead = 0;
@@ -644,10 +648,11 @@ int main() {
 
 
 	// according to the libMPSSE manual initializing the I2C channel should do all of the above automatically.
-	ftStatus = I2C_GetNumChannels(&numI2Cchannels);
-	printf("num channels = %lu\n", numI2Cchannels);
+	/*ftStatus = I2C_GetNumChannels(&numI2Cchannels);
+	printf("num channels = %lu\n", numI2Cchannels);*/
 
 	// test code, check channel info
+	/*
 	FT_DEVICE_LIST_INFO_NODE devList;
 	if (numI2Cchannels > 0) {
 		for (int i = 0; i < numI2Cchannels; i++) {
@@ -662,13 +667,14 @@ int main() {
 			printf("	ftHandle = 0x%p\n", devList.ftHandle);
 		}
 	}
+	*/
 
 	// set up onboard GPIO default pin directions
 	// low four pins will be inputs by default, upper four pins will be outputs by default
 	// direction = 0xF0
 	// initial state = 0x00 // low outputs by default
 	// command = 0x82
-	uint32 dirCommand = 0xF00082;
+	unsigned long int dirCommand = 0xF00082;
 	void * dirCmdPtr = (void*)&dirCommand;
 	unsigned int bytesSent = 0;
 	FT_Write(deviceHandle, dirCmdPtr, 3, &bytesSent);
@@ -695,7 +701,6 @@ int main() {
 	printf("\n\n\nCheck for output on the GPIO pin\n");
 	printf("Press any key to continue...\n");
 	getchar();
-	/*
 	
 	//sends a test loop for GPIO high/low pulses with a period of 2 seconds for 10 full cycles
 	for (int i = 0; i < 10; i++) {
@@ -715,7 +720,6 @@ int main() {
 		sleep(1);
 
 	}
-	*/
 
 	dirCommand = 0xF01082;
 	dirCmdPtr = (void*)&dirCommand;
@@ -807,10 +811,10 @@ int main() {
 
 	*/
 
-	uint16 adc_config = 0x0FF8;
+	unsigned int adc_config = 0x0FF8;
 	void* adc_config_ptr = (void*)&adc_config;
 	// writes config to ADC
-	//write_bytes(ADC_ADR, ADC_CONF_REG, (uint8*)adc_config_ptr, 2);
+	//write_bytes(ADC_ADR, ADC_CONF_REG, (unsigned char*)adc_config_ptr, 2);
 	
 
 	/*
@@ -829,9 +833,9 @@ int main() {
 
 	config register is 0100 0000 =  0x40
 	*/
-	uint16 dac_config = 0x8000;
+	unsigned int dac_config = 0x8000;
 	void* dac_config_ptr = (void*)&dac_config;
-	//write_bytes(DAC_ADR, DAC_CONF_REG, (uint8*)dac_config_ptr, 2);
+	//write_bytes(DAC_ADR, DAC_CONF_REG, (unsigned char*)dac_config_ptr, 2);
 	if(ftStatus != FT_OK) {
 		printf("ftStatus is not ok, something went wrong (before)\n");
 		printf("ftStatus = %x\n", ftStatus);
@@ -851,8 +855,8 @@ int main() {
 	/*	
 	// Set up default configuration values in IOCON (configuration) register
 	// Due to default value, this should be at address 0A. After this configuration is sent, it will be at 05.
-	uint8 gpio_config_adr = 0x0A;
-	uint8 gpio_config_data = 0x60;
+	unsigned char gpio_config_adr = 0x0A;
+	unsigned char gpio_config_data = 0x60;
 	// I2C line to send configuration data, shouldn't need to touch after this
 	ftStatus = write_bytes(GPIO_EX_1_ADR, gpio_config_adr, &gpio_config_data, 1);
 	ftStatus = write_bytes(GPIO_EX_2_ADR, gpio_config_adr, &gpio_config_data, 1);
