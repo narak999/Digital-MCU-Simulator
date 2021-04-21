@@ -17,6 +17,12 @@
 
 	You should have received a copy of the GNU General Public License
 	along with simavr.  If not, see <http://www.gnu.org/licenses/>.
+
+	simavr modified by Jonathan Howard, ECEN 404 Team 10, Spring 2021
+	Texas A&M University
+	This modification is licensed under the same GNU GPL v3 as simavr,
+	and the license has been included in the main directory of the project as
+	GPL.txt.
  */
 
 #include <stdlib.h>
