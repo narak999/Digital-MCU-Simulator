@@ -1,0 +1,1 @@
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ACTION=="add", RUN+="/usr/local/bin/trigger.sh", GROUP="jahoward", OWNER="jahoward", MODE="0666"
