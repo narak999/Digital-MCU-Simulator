@@ -5,4 +5,5 @@ For my code (DMCUS_IDE.py), in order to successfully run it, the user will need 
 
 NOTE: This Python code is created and meant to run with Python 3.6. Using a different version of Python to compile and run the code might cause unexpected errors.
 
-Compilation command for simavr: avr-gcc -Wall -gdwarf-2 -Os -std=gnu99 -DF_CPU=8000000 -fno-inline-small-functions -ffunction-sections -fdata-sections -Wl,--relax,--gc-sections -Wl,--undefined=_mmcu,--section-start=.mmcu=0x910000 -I ~/Desktop/simavr/simavr/sim -I ~/Desktop/simavr/simavr/sim/avr -mmcu=atmega88 ledblink.c -o ledblink.elf
+Compilation command for simavr: 
+avr-gcc -Wall -gdwarf-2 -Os -std=gnu99 -DF_CPU=8000000 -fno-inline-small-functions -ffunction-sections -fdata-sections -Wl,--relax,--gc-sections -Wl,--undefined=_mmcu,--section-start=.mmcu=0x910000 -I ~/Desktop/simavr/simavr/sim -I ~/Desktop/simavr/simavr/sim/avr -mmcu=atmega88 ledblink.c -o ledblink.elf
