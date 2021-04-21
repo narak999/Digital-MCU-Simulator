@@ -100,7 +100,7 @@ namespace spiceGUI
 
             //read line by line and add to list box
             //while ((line = fs.ReadLine()).Length > 1)
-            while (line != ".end")
+             while (line != ".end")
             {
                 listBox1.Items.Add(line);
                 line = fs.ReadLine();
@@ -111,7 +111,7 @@ namespace spiceGUI
         
         private void generateComponentsList(ListBox listBox)
         {
-            for(int i = 1; i<listBox.Items.Count-2; i++)
+            for(int i = 1; i<listBox.Items.Count; i++)
             {
                 string comp = listBox.Items[i].ToString().Substring(0, listBox.Items[i].ToString().IndexOf(' '));
                 if(!component.Contains(comp))
@@ -120,7 +120,7 @@ namespace spiceGUI
         }
         private void generateNodeList(ListBox listBox)
         {
-            for (int i = 1; i < listBox.Items.Count-2; i++)
+            for (int i = 1; i < listBox.Items.Count; i++)
             {
                 string firstword = listBox.Items[i].ToString().Substring(0, listBox.Items[i].ToString().IndexOf(' '));
                 string remainingSentence1 = listBox.Items[i].ToString().Substring(listBox.Items[i].ToString().IndexOf(' ')+1);
