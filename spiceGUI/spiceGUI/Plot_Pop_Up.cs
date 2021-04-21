@@ -43,7 +43,7 @@ namespace spiceGUI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            listBox.Items.Add(".plot " + prtype + "(" + N1 + "," + N2 + ")");
+            listBox.Items.Add("plot " + prtype + "(" + N1 + "," + N2 + ")");
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -56,12 +56,12 @@ namespace spiceGUI
            // N2 = comboBox4.GetItemText(comboBox4.SelectedItem);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click_1(object sender, EventArgs e)
         {
             N1 = comboBox3.GetItemText(comboBox3.SelectedItem);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void button3_Click_1(object sender, EventArgs e)
         {
             N2 = comboBox4.GetItemText(comboBox4.SelectedItem);
         }
