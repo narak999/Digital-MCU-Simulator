@@ -1,0 +1,708 @@
+
+;; Function uart_putchar (uart_putchar, funcdef_no=7, decl_uid=2025, cgraph_uid=7, symbol_order=11)
+
+Starting decreasing number of live ranges...
+starting the processing of deferred insns
+ending the processing of deferred insns
+df_analyze called
+starting the processing of deferred insns
+ending the processing of deferred insns
+df_analyze called
+Reg 46: def dominates all uses has unique first use
+Reg 47: def dominates all uses has unique first use
+Reg 43 uninteresting
+Reg 46 not local to one basic block
+Reg 47 not local to one basic block
+Building IRA IR
+starting the processing of deferred insns
+ending the processing of deferred insns
+df_analyze called
+
+Pass 0 for finding pseudo/allocno costs
+
+    a2 (r47,l0) best GENERAL_REGS, allocno GENERAL_REGS
+    a0 (r46,l0) best LD_REGS, allocno LD_REGS
+    a1 (r43,l0) best GENERAL_REGS, allocno GENERAL_REGS
+
+  a0(r46,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:5000
+  a1(r43,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:0 GENERAL_REGS:0 MEM:4000
+  a2(r47,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:0 GENERAL_REGS:0 MEM:2000
+
+
+Pass 1 for finding pseudo/allocno costs
+
+    r47: preferred GENERAL_REGS, alternative NO_REGS, allocno GENERAL_REGS
+    r46: preferred LD_REGS, alternative GENERAL_REGS, allocno GENERAL_REGS
+    r43: preferred GENERAL_REGS, alternative NO_REGS, allocno GENERAL_REGS
+
+  a0(r46,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:6000
+  a1(r43,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:0 GENERAL_REGS:0 MEM:4000
+  a2(r47,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:0 GENERAL_REGS:0 MEM:8000
+
+   Insn 31(l0): point = 0
+   Insn 30(l0): point = 2
+   Insn 25(l0): point = 4
+   Insn 21(l0): point = 7
+   Insn 17(l0): point = 9
+   Insn 12(l0): point = 12
+   Insn 11(l0): point = 14
+   Insn 10(l0): point = 16
+   Insn 8(l0): point = 19
+   Insn 7(l0): point = 21
+   Insn 3(l0): point = 23
+   Insn 2(l0): point = 25
+ a0(r46): [5..25]
+ a1(r43): [8..9]
+ a2(r47 [0]): [17..23]
+ a2(r47 [1]): [17..23]
+Compressing live ranges: from 28 to 4 - 14%
+Ranges after the compression:
+ a0(r46): [0..3]
+ a1(r43): [0..1]
+ a2(r47 [0]): [2..3]
+ a2(r47 [1]): [2..3]
++++Allocating 32 bytes for conflict table (uncompressed size 32)
+;; a0(r46,l0) conflicts: a1(r43,l0) a2(r47,w0,l0) a2(r47,w1,l0)
+;;     total conflict hard regs: 18-27 30 31
+;;     conflict hard regs: 18-27 30 31
+
+;; a1(r43,l0) conflicts: a0(r46,l0)
+;;     total conflict hard regs:
+;;     conflict hard regs:
+
+;; a2(r47,l0) conflicts:
+;;   subobject 0: a0(r46,l0)
+;;     total conflict hard regs:
+;;     conflict hard regs:
+
+
+;;   subobject 1: a0(r46,l0)
+;;     total conflict hard regs:
+;;     conflict hard regs:
+
+  pref0:a2(r47)<-hr22@4000
+  pref1:a0(r46)<-hr24@2000
+  regions=1, blocks=6, points=4
+    allocnos=3 (big 1), copies=0, conflicts=0, ranges=4
+
+**** Allocnos coloring:
+
+
+  Loop 0 (parent -1, header bb2, depth 0)
+    bbs: 5 4 3 2
+    all: 0r46 1r43 2r47
+    modified regnos: 43 46 47
+    border:
+    Pressure: GENERAL_REGS=4
+ Removing pref1:hr24@2000
+    Hard reg set forest:
+      0:( 2-31)@40000
+        1:( 2-17 28 29)@20000
+      Allocno a0r46 of GENERAL_REGS(30) has 18 avail. regs  2-17 28 29, node:  2-17 28 29 (confl regs =  0 1 18-27 30-34)
+      Allocno a1r43 of GENERAL_REGS(30) has 30 avail. regs  2-31, node:  2-31 (confl regs =  0 1 32-34)
+      Allocno a2r47 of GENERAL_REGS(30) has 30 avail. regs  2-31, node:  2-31 obj 0 (confl regs =  0 1 32-34),  obj 1 (confl regs =  0 1 32-34)
+      Pushing a2(r47,l0)(cost 0)
+      Pushing a1(r43,l0)(cost 0)
+      Pushing a0(r46,l0)(cost 0)
+      Popping a0(r46,l0)  -- assign reg 28
+      Popping a1(r43,l0)  -- assign reg 24
+      Popping a2(r47,l0)  -- assign reg 22
+Disposition:
+    1:r43  l0    24    0:r46  l0    28    2:r47  l0    22
+New iteration of spill/restore move
++++Costs: overall -8000, reg -8000, mem 0, ld 0, st 0, move 0
++++       move loops 0, new jumps 0
+
+
+uart_putchar
+
+Dataflow summary:
+;;  invalidated by call 	 0 [r0] 1 [r1] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 26 [r26] 27 [r27] 30 [r30] 31 [r31] 33 [__SP_H__] 35 [argH]
+;;  hardware regs used 	 28 [r28] 32 [__SP_L__] 34 [argL]
+;;  regular block artificial uses 	 28 [r28] 32 [__SP_L__] 34 [argL]
+;;  eh block artificial uses 	 28 [r28] 32 [__SP_L__] 34 [argL]
+;;  entry block defs 	 2 [r2] 8 [r8] 9 [r9] 10 [r10] 11 [r11] 12 [r12] 13 [r13] 14 [r14] 15 [r15] 16 [r16] 17 [r17] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__] 34 [argL]
+;;  exit block uses 	 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__]
+;;  regs ever live 	 22[r22] 23[r23] 24[r24] 25[r25] 32[__SP_L__]
+;;  ref usage 	r0={1d} r1={1d} r2={1d} r8={1d} r9={1d} r10={1d} r11={1d} r12={1d} r13={1d} r14={1d} r15={1d} r16={1d} r17={1d} r18={2d} r19={2d} r20={2d} r21={2d} r22={3d,2u} r23={3d,2u} r24={4d,4u} r25={4d,2u} r26={1d} r27={1d} r28={1d,5u} r30={1d} r31={1d} r32={1d,6u} r33={1d} r34={1d,4u} r35={1d} r43={1d,1u} r46={1d,2u} r47={1d,1u} 
+;;    total ref usage 76{47d,29u,0e} in 12{11 regular + 1 call} insns.
+(note 1 0 5 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 900, maybe hot
+;;  prev block 0, next block 3, flags: (RTL)
+;;  pred:       ENTRY [100.0%]  (FALLTHRU)
+;; bb 2 artificial_defs: { }
+;; bb 2 artificial_uses: { u0(28){ }u1(32){ }u2(34){ }}
+;; lr  in  	 22 [r22] 23 [r23] 24 [r24] 28 [r28] 32 [__SP_L__] 34 [argL]
+;; lr  use 	 22 [r22] 23 [r23] 24 [r24] 28 [r28] 32 [__SP_L__] 34 [argL]
+;; lr  def 	 46 47
+(note 5 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(insn 2 5 3 2 (set (reg/v:QI 46 [ c ])
+        (reg:QI 24 r24 [ c ])) ledblink.c:20 71 {movqi_insn}
+     (expr_list:REG_DEAD (reg:QI 24 r24 [ c ])
+        (nil)))
+(insn 3 2 4 2 (set (reg/v/f:HI 47 [ stream ])
+        (reg:HI 22 r22 [ stream ])) ledblink.c:20 83 {*movhi}
+     (expr_list:REG_DEAD (reg:HI 22 r22 [ stream ])
+        (nil)))
+(note 4 3 7 2 NOTE_INSN_FUNCTION_BEG)
+(insn 7 4 8 2 (set (cc0)
+        (compare (reg/v:QI 46 [ c ])
+            (const_int 10 [0xa]))) ledblink.c:21 404 {*cmpqi}
+     (nil))
+(jump_insn 8 7 9 2 (set (pc)
+        (if_then_else (ne (cc0)
+                (const_int 0 [0]))
+            (label_ref:HI 18)
+            (pc))) ledblink.c:21 428 {branch}
+     (int_list:REG_BR_PROB 8629 (nil))
+ -> 18)
+;;  succ:       3 [13.7%]  (FALLTHRU)
+;;              4 [86.3%] 
+;; lr  out 	 28 [r28] 32 [__SP_L__] 34 [argL] 46 47
+
+;; basic block 3, loop depth 0, count 0, freq 123, maybe hot
+;;  prev block 2, next block 4, flags: (RTL)
+;;  pred:       2 [13.7%]  (FALLTHRU)
+;; bb 3 artificial_defs: { }
+;; bb 3 artificial_uses: { u7(28){ }u8(32){ }u9(34){ }}
+;; lr  in  	 28 [r28] 32 [__SP_L__] 34 [argL] 46 47
+;; lr  use 	 28 [r28] 32 [__SP_L__] 34 [argL] 47
+;; lr  def 	 0 [r0] 1 [r1] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 26 [r26] 27 [r27] 30 [r30] 31 [r31] 33 [__SP_H__] 35 [argH]
+(note 9 8 10 3 [bb 3] NOTE_INSN_BASIC_BLOCK)
+(insn 10 9 11 3 (set (reg:HI 22 r22)
+        (reg/v/f:HI 47 [ stream ])) ledblink.c:22 83 {*movhi}
+     (expr_list:REG_DEAD (reg/v/f:HI 47 [ stream ])
+        (nil)))
+(insn 11 10 12 3 (set (reg:QI 24 r24)
+        (const_int 13 [0xd])) ledblink.c:22 71 {movqi_insn}
+     (nil))
+(call_insn 12 11 18 3 (parallel [
+            (set (reg:HI 24 r24)
+                (call (mem:HI (symbol_ref:HI ("uart_putchar") [flags 0x3]  <function_decl 0x7fce25999af8 uart_putchar>) [0 uart_putchar S2 A8])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+        ]) ledblink.c:22 435 {call_value_insn}
+     (expr_list:REG_DEAD (reg:HI 22 r22)
+        (expr_list:REG_UNUSED (reg:HI 24 r24)
+            (expr_list:REG_CALL_DECL (symbol_ref:HI ("uart_putchar") [flags 0x3]  <function_decl 0x7fce25999af8 uart_putchar>)
+                (expr_list:REG_EH_REGION (const_int 0 [0])
+                    (nil)))))
+    (expr_list:QI (use (reg:QI 24 r24))
+        (expr_list:HI (use (reg:HI 22 r22))
+            (nil))))
+;;  succ:       4 [100.0%]  (FALLTHRU)
+;; lr  out 	 28 [r28] 32 [__SP_L__] 34 [argL] 46
+
+;; basic block 4, loop depth 0, count 0, freq 10000, maybe hot
+;;  prev block 3, next block 5, flags: (RTL, MODIFIED)
+;;  pred:       3 [100.0%]  (FALLTHRU)
+;;              4 [91.0%] 
+;;              2 [86.3%] 
+;; bb 4 artificial_defs: { }
+;; bb 4 artificial_uses: { u15(28){ }u16(32){ }u17(34){ }}
+;; lr  in  	 28 [r28] 32 [__SP_L__] 34 [argL] 46
+;; lr  use 	 28 [r28] 32 [__SP_L__] 34 [argL]
+;; lr  def 	 43
+(code_label 18 12 15 4 3 "" [2 uses])
+(note 15 18 17 4 [bb 4] NOTE_INSN_BASIC_BLOCK)
+(insn 17 15 19 4 (set (reg:QI 43 [ D.2072 ])
+        (mem/v:QI (const_int 192 [0xc0]) [0 MEM[(volatile uint8_t *)192B]+0 S1 A8])) ledblink.c:23 71 {movqi_insn}
+     (nil))
+(note 19 17 20 4 NOTE_INSN_DELETED)
+(note 20 19 21 4 NOTE_INSN_DELETED)
+(jump_insn 21 20 22 4 (set (pc)
+        (if_then_else (eq (zero_extract:QI (reg:QI 43 [ D.2072 ])
+                    (const_int 1 [0x1])
+                    (const_int 5 [0x5]))
+                (const_int 0 [0]))
+            (label_ref:HI 18)
+            (pc))) ledblink.c:23 419 {*sbrx_branchqi}
+     (expr_list:REG_DEAD (reg:QI 43 [ D.2072 ])
+        (int_list:REG_BR_PROB 9100 (nil)))
+ -> 18)
+;;  succ:       4 [91.0%] 
+;;              5 [9.0%]  (FALLTHRU,LOOP_EXIT)
+;; lr  out 	 28 [r28] 32 [__SP_L__] 34 [argL] 46
+
+;; basic block 5, loop depth 0, count 0, freq 900, maybe hot
+;;  prev block 4, next block 1, flags: (RTL)
+;;  pred:       4 [9.0%]  (FALLTHRU,LOOP_EXIT)
+;; bb 5 artificial_defs: { }
+;; bb 5 artificial_uses: { u20(28){ }u21(32){ }u22(34){ }}
+;; lr  in  	 28 [r28] 32 [__SP_L__] 34 [argL] 46
+;; lr  use 	 28 [r28] 32 [__SP_L__] 34 [argL] 46
+;; lr  def 	 24 [r24] 25 [r25]
+(note 22 21 25 5 [bb 5] NOTE_INSN_BASIC_BLOCK)
+(insn 25 22 30 5 (set (mem/v:QI (const_int 198 [0xc6]) [0 MEM[(volatile uint8_t *)198B]+0 S1 A8])
+        (reg/v:QI 46 [ c ])) ledblink.c:24 71 {movqi_insn}
+     (expr_list:REG_DEAD (reg/v:QI 46 [ c ])
+        (nil)))
+(insn 30 25 31 5 (set (reg/i:HI 24 r24)
+        (const_int 0 [0])) ledblink.c:26 83 {*movhi}
+     (nil))
+(insn 31 30 0 5 (use (reg/i:HI 24 r24)) ledblink.c:26 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+;; lr  out 	 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__] 34 [argL]
+
+
+;; Function main (main, funcdef_no=8, decl_uid=2030, cgraph_uid=8, symbol_order=13) (executed once)
+
+Starting decreasing number of live ranges...
+starting the processing of deferred insns
+ending the processing of deferred insns
+df_analyze called
+starting the processing of deferred insns
+ending the processing of deferred insns
+df_analyze called
+Reg 50 uninteresting
+Reg 52 uninteresting
+Reg 54 uninteresting
+Reg 63: def dominates all uses has unique first use
+Reg 43 uninteresting
+Reg 46 uninteresting
+Reg 47 uninteresting
+Reg 63 not local to one basic block
+Building IRA IR
+starting the processing of deferred insns
+ending the processing of deferred insns
+df_analyze called
+init_insns for 50: (insn_list:REG_DEP_TRUE 7 (nil))
+init_insns for 52: (insn_list:REG_DEP_TRUE 10 (nil))
+init_insns for 54: (insn_list:REG_DEP_TRUE 15 (nil))
+init_insns for 63: (insn_list:REG_DEP_TRUE 28 (nil))
+
+Pass 0 for finding pseudo/allocno costs
+
+    a1 (r63,l0) best LD_REGS, allocno LD_REGS
+    a5 (r54,l0) best LD_REGS, allocno LD_REGS
+    a6 (r52,l0) best LD_REGS, allocno LD_REGS
+    a7 (r50,l0) best LD_REGS, allocno LD_REGS
+    a2 (r47,l0) best GENERAL_REGS, allocno GENERAL_REGS
+    a3 (r46,l0) best GENERAL_REGS, allocno GENERAL_REGS
+    a4 (r43,l0) best GENERAL_REGS, allocno GENERAL_REGS
+    a0 (r42,l0) best LD_REGS, allocno LD_REGS
+
+  a0(r42,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:16000
+  a1(r63,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:4000
+  a2(r47,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:0 GENERAL_REGS:0 MEM:4000
+  a3(r46,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:0 GENERAL_REGS:0 MEM:4000
+  a4(r43,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:0 GENERAL_REGS:0 MEM:4000
+  a5(r54,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:4000
+  a6(r52,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:8000
+  a7(r50,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:4000
+
+
+Pass 1 for finding pseudo/allocno costs
+
+    r63: preferred LD_REGS, alternative GENERAL_REGS, allocno GENERAL_REGS
+    r54: preferred LD_REGS, alternative GENERAL_REGS, allocno GENERAL_REGS
+    r52: preferred LD_REGS, alternative GENERAL_REGS, allocno GENERAL_REGS
+    r50: preferred LD_REGS, alternative GENERAL_REGS, allocno GENERAL_REGS
+    r47: preferred GENERAL_REGS, alternative NO_REGS, allocno GENERAL_REGS
+    r46: preferred GENERAL_REGS, alternative NO_REGS, allocno GENERAL_REGS
+    r43: preferred GENERAL_REGS, alternative NO_REGS, allocno GENERAL_REGS
+    r42: preferred LD_REGS, alternative GENERAL_REGS, allocno GENERAL_REGS
+
+  a0(r42,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:16000
+  a1(r63,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:4000
+  a2(r47,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:0 GENERAL_REGS:0 MEM:4000
+  a3(r46,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:0 GENERAL_REGS:0 MEM:4000
+  a4(r43,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:0 GENERAL_REGS:0 MEM:4000
+  a5(r54,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:4000
+  a6(r52,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:8000
+  a7(r50,l0) costs: POINTER_X_REGS:0 POINTER_Y_REGS:0 POINTER_Z_REGS:0 BASE_POINTER_REGS:0 POINTER_REGS:0 ADDW_REGS:0 SIMPLE_LD_REGS:0 LD_REGS:0 NO_LD_REGS:2000 GENERAL_REGS:2000 MEM:4000
+
+   Insn 55(l0): point = 0
+   Insn 54(l0): point = 2
+   Insn 49(l0): point = 4
+   Insn 25(l0): point = 7
+   Insn 24(l0): point = 9
+   Insn 21(l0): point = 11
+   Insn 47(l0): point = 14
+   Insn 46(l0): point = 16
+   Insn 44(l0): point = 18
+   Insn 43(l0): point = 20
+   Insn 42(l0): point = 22
+   Insn 41(l0): point = 24
+   Insn 38(l0): point = 27
+   Insn 36(l0): point = 29
+   Insn 35(l0): point = 31
+   Insn 60(l0): point = 34
+   Insn 29(l0): point = 36
+   Insn 28(l0): point = 39
+   Insn 3(l0): point = 41
+   Insn 18(l0): point = 43
+   Insn 17(l0): point = 45
+   Insn 16(l0): point = 47
+   Insn 15(l0): point = 49
+   Insn 13(l0): point = 51
+   Insn 12(l0): point = 53
+   Insn 11(l0): point = 55
+   Insn 10(l0): point = 57
+   Insn 8(l0): point = 59
+   Insn 7(l0): point = 61
+ a0(r42 [0]): [7..41]
+ a0(r42 [1]): [7..41]
+ a1(r63): [7..39]
+ a2(r47): [28..29]
+ a3(r46): [30..31]
+ a4(r43): [10..11]
+ a5(r54): [48..49]
+ a6(r52 [0]): [56..57]
+ a6(r52 [1]): [56..57]
+ a7(r50): [60..61]
+Compressing live ranges: from 64 to 12 - 18%
+Ranges after the compression:
+ a0(r42 [0]): [0..5]
+ a0(r42 [1]): [0..5]
+ a1(r63): [0..5]
+ a2(r47): [2..3]
+ a3(r46): [4..5]
+ a4(r43): [0..1]
+ a5(r54): [6..7]
+ a6(r52 [0]): [8..9]
+ a6(r52 [1]): [8..9]
+ a7(r50): [10..11]
++++Allocating 64 bytes for conflict table (uncompressed size 80)
+;; a0(r42,l0) conflicts:
+;;   subobject 0: a4(r43,l0) a1(r63,l0) a2(r47,l0) a3(r46,l0)
+;;     total conflict hard regs:
+;;     conflict hard regs:
+
+
+;;   subobject 1: a4(r43,l0) a1(r63,l0) a2(r47,l0) a3(r46,l0)
+;;     total conflict hard regs:
+;;     conflict hard regs:
+
+;; a1(r63,l0) conflicts: a4(r43,l0) a0(r42,w0,l0) a0(r42,w1,l0) a2(r47,l0) a3(r46,l0)
+;;     total conflict hard regs:
+;;     conflict hard regs:
+
+;; a2(r47,l0) conflicts: a0(r42,w0,l0) a0(r42,w1,l0) a1(r63,l0)
+;;     total conflict hard regs:
+;;     conflict hard regs:
+
+;; a3(r46,l0) conflicts: a0(r42,w0,l0) a0(r42,w1,l0) a1(r63,l0)
+;;     total conflict hard regs:
+;;     conflict hard regs:
+
+;; a4(r43,l0) conflicts: a0(r42,w0,l0) a0(r42,w1,l0) a1(r63,l0)
+;;     total conflict hard regs:
+;;     conflict hard regs:
+
+;; a5(r54,l0) conflicts:;; a6(r52,l0) conflicts:
+;;   subobject 0:
+;;     total conflict hard regs:
+;;     conflict hard regs:
+
+
+;;   subobject 1:
+;;     total conflict hard regs:
+;;     conflict hard regs:
+
+;; a7(r50,l0) conflicts:  cp0:a2(r47)<->a3(r46)@1000:constraint
+  regions=1, blocks=8, points=12
+    allocnos=8 (big 2), copies=1, conflicts=0, ranges=10
+
+**** Allocnos coloring:
+
+
+  Loop 0 (parent -1, header bb2, depth 0)
+    bbs: 7 6 5 4 3 2
+    all: 0r42 1r63 2r47 3r46 4r43 5r54 6r52 7r50
+    modified regnos: 42 43 46 47 50 52 54 63
+    border:
+    Pressure: GENERAL_REGS=4
+    Hard reg set forest:
+      0:( 2-31)@96000
+      Allocno a0r42 of GENERAL_REGS(30) has 30 avail. regs  2-31, node:  2-31 obj 0 (confl regs =  0 1 32-34),  obj 1 (confl regs =  0 1 32-34)
+      Allocno a1r63 of GENERAL_REGS(30) has 30 avail. regs  2-31, node:  2-31 (confl regs =  0 1 32-34)
+      Allocno a2r47 of GENERAL_REGS(30) has 30 avail. regs  2-31, node:  2-31 (confl regs =  0 1 32-34)
+      Allocno a3r46 of GENERAL_REGS(30) has 30 avail. regs  2-31, node:  2-31 (confl regs =  0 1 32-34)
+      Allocno a4r43 of GENERAL_REGS(30) has 30 avail. regs  2-31, node:  2-31 (confl regs =  0 1 32-34)
+      Allocno a5r54 of GENERAL_REGS(30) has 30 avail. regs  2-31, node:  2-31 (confl regs =  0 1 32-34)
+      Allocno a6r52 of GENERAL_REGS(30) has 30 avail. regs  2-31, node:  2-31 obj 0 (confl regs =  0 1 32-34),  obj 1 (confl regs =  0 1 32-34)
+      Allocno a7r50 of GENERAL_REGS(30) has 30 avail. regs  2-31, node:  2-31 (confl regs =  0 1 32-34)
+      Forming thread by copy 0:a2r47-a3r46 (freq=1000):
+        Result (freq=4000): a2r47(2000) a3r46(2000)
+      Pushing a7(r50,l0)(cost 0)
+      Pushing a6(r52,l0)(cost 0)
+      Pushing a5(r54,l0)(cost 0)
+      Pushing a4(r43,l0)(cost 0)
+      Pushing a1(r63,l0)(cost 0)
+      Pushing a3(r46,l0)(cost 0)
+      Pushing a2(r47,l0)(cost 0)
+      Pushing a0(r42,l0)(cost 0)
+      Popping a0(r42,l0)  -- assign reg 24
+      Popping a2(r47,l0)  -- assign reg 18
+      Popping a3(r46,l0)  -- assign reg 18
+      Popping a1(r63,l0)  -- assign reg 19
+      Popping a4(r43,l0)  -- assign reg 18
+      Popping a5(r54,l0)  -- assign reg 24
+      Popping a6(r52,l0)  -- assign reg 24
+      Popping a7(r50,l0)  -- assign reg 24
+Disposition:
+    0:r42  l0    24    4:r43  l0    18    3:r46  l0    18    2:r47  l0    18
+    7:r50  l0    24    6:r52  l0    24    5:r54  l0    24    1:r63  l0    19
+New iteration of spill/restore move
++++Costs: overall 0, reg 0, mem 0, ld 0, st 0, move 0
++++       move loops 0, new jumps 0
+
+
+main
+
+Dataflow summary:
+;;  invalidated by call 	 0 [r0] 1 [r1] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 26 [r26] 27 [r27] 30 [r30] 31 [r31] 33 [__SP_H__] 35 [argH]
+;;  hardware regs used 	 28 [r28] 32 [__SP_L__] 34 [argL]
+;;  regular block artificial uses 	 28 [r28] 32 [__SP_L__] 34 [argL]
+;;  eh block artificial uses 	 28 [r28] 32 [__SP_L__] 34 [argL]
+;;  entry block defs 	 2 [r2] 8 [r8] 9 [r9] 10 [r10] 11 [r11] 12 [r12] 13 [r13] 14 [r14] 15 [r15] 16 [r16] 17 [r17] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__] 34 [argL]
+;;  exit block uses 	 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__]
+;;  regs ever live 	 24[r24] 25[r25] 32[__SP_L__]
+;;  ref usage 	r0={2d} r1={2d} r2={1d} r8={1d} r9={1d} r10={1d} r11={1d} r12={1d} r13={1d} r14={1d} r15={1d} r16={1d} r17={1d} r18={3d} r19={3d} r20={3d} r21={3d} r22={3d} r23={3d} r24={6d,4u} r25={8d,4u} r26={2d} r27={2d} r28={1d,7u} r30={2d} r31={2d} r32={1d,9u} r33={2d} r34={1d,6u} r35={2d} r42={2d,2u} r43={1d,1u} r46={1d,1u} r47={1d,1u} r50={1d,1u} r52={1d,1u} r54={1d,1u} r63={1d,1u} 
+;;    total ref usage 110{71d,39u,0e} in 29{27 regular + 2 call} insns.
+(note 1 0 4 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 100, maybe hot
+;;  prev block 0, next block 3, flags: (RTL)
+;;  pred:       ENTRY [100.0%]  (FALLTHRU)
+;; bb 2 artificial_defs: { }
+;; bb 2 artificial_uses: { u0(28){ }u1(32){ }u2(34){ }}
+;; lr  in  	 28 [r28] 32 [__SP_L__] 34 [argL]
+;; lr  use 	 28 [r28] 32 [__SP_L__] 34 [argL]
+;; lr  def 	 0 [r0] 1 [r1] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 26 [r26] 27 [r27] 30 [r30] 31 [r31] 33 [__SP_H__] 35 [argH] 42 50 52 54 63
+(note 4 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 4 7 2 NOTE_INSN_FUNCTION_BEG)
+(insn 7 2 8 2 (set (reg:QI 50)
+        (const_int -1 [0xffffffffffffffff])) ledblink.c:34 71 {movqi_insn}
+     (expr_list:REG_EQUIV (const_int -1 [0xffffffffffffffff])
+        (nil)))
+(insn 8 7 10 2 (set (mem/v:QI (const_int 36 [0x24]) [0 MEM[(volatile uint8_t *)36B]+0 S1 A8])
+        (reg:QI 50)) ledblink.c:34 71 {movqi_insn}
+     (expr_list:REG_DEAD (reg:QI 50)
+        (nil)))
+(insn 10 8 11 2 (set (reg/f:HI 52)
+        (symbol_ref:HI ("mystdout") [flags 0x2]  <var_decl 0x7fce25975bd0 mystdout>)) ledblink.c:36 83 {*movhi}
+     (expr_list:REG_EQUIV (symbol_ref:HI ("mystdout") [flags 0x2]  <var_decl 0x7fce25975bd0 mystdout>)
+        (nil)))
+(insn 11 10 12 2 (set (mem/f:HI (const:HI (plus:HI (symbol_ref:HI ("__iob") [flags 0x40]  <var_decl 0x7fce25975360 __iob>)
+                    (const_int 2 [0x2]))) [1 __iob+2 S2 A8])
+        (reg/f:HI 52)) ledblink.c:36 83 {*movhi}
+     (expr_list:REG_DEAD (reg/f:HI 52)
+        (nil)))
+(insn 12 11 13 2 (set (reg:HI 24 r24)
+        (symbol_ref/f:HI ("*.LC0") [flags 0x2]  <var_decl 0x7fce259bb6c0 *.LC0>)) ledblink.c:37 83 {*movhi}
+     (nil))
+(call_insn 13 12 15 2 (parallel [
+            (set (reg:HI 24 r24)
+                (call (mem:HI (symbol_ref:HI ("puts") [flags 0x41]  <function_decl 0x7fce258a71b0 __builtin_puts>) [0 __builtin_puts S2 A8])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+        ]) ledblink.c:37 435 {call_value_insn}
+     (expr_list:REG_UNUSED (reg:HI 24 r24)
+        (expr_list:REG_CALL_DECL (symbol_ref:HI ("puts") [flags 0x41]  <function_decl 0x7fce258a71b0 __builtin_puts>)
+            (nil)))
+    (expr_list:HI (use (reg:HI 24 r24))
+        (nil)))
+(insn 15 13 16 2 (set (reg:QI 54)
+        (const_int 1 [0x1])) ledblink.c:41 71 {movqi_insn}
+     (expr_list:REG_EQUIV (const_int 1 [0x1])
+        (nil)))
+(insn 16 15 17 2 (set (mem/v:QI (const_int 37 [0x25]) [0 MEM[(volatile uint8_t *)37B]+0 S1 A8])
+        (reg:QI 54)) ledblink.c:41 71 {movqi_insn}
+     (expr_list:REG_DEAD (reg:QI 54)
+        (nil)))
+(insn 17 16 18 2 (set (reg:HI 24 r24)
+        (symbol_ref/f:HI ("*.LC1") [flags 0x2]  <var_decl 0x7fce259bb750 *.LC1>)) ledblink.c:42 83 {*movhi}
+     (nil))
+(call_insn 18 17 3 2 (parallel [
+            (set (reg:HI 24 r24)
+                (call (mem:HI (symbol_ref:HI ("puts") [flags 0x41]  <function_decl 0x7fce258a71b0 __builtin_puts>) [0 __builtin_puts S2 A8])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+        ]) ledblink.c:42 435 {call_value_insn}
+     (expr_list:REG_UNUSED (reg:HI 24 r24)
+        (expr_list:REG_CALL_DECL (symbol_ref:HI ("puts") [flags 0x41]  <function_decl 0x7fce258a71b0 __builtin_puts>)
+            (nil)))
+    (expr_list:HI (use (reg:HI 24 r24))
+        (nil)))
+(insn 3 18 28 2 (set (reg:HI 42 [ D.2081 ])
+        (const_int 100 [0x64])) ledblink.c:42 83 {*movhi}
+     (expr_list:REG_EQUAL (const_int 100 [0x64])
+        (nil)))
+(insn 28 3 45 2 (set (reg:QI 63)
+        (const_int 1 [0x1])) ledblink.c:46 71 {movqi_insn}
+     (expr_list:REG_EQUIV (const_int 1 [0x1])
+        (nil)))
+;;  succ:       3 [100.0%]  (FALLTHRU)
+;; lr  out 	 28 [r28] 32 [__SP_L__] 34 [argL] 42 63
+
+;; basic block 3, loop depth 0, count 0, freq 9900, maybe hot
+;;  prev block 2, next block 4, flags: (RTL, MODIFIED)
+;;  pred:       6 [99.0%]  (DFS_BACK)
+;;              2 [100.0%]  (FALLTHRU)
+;; bb 3 artificial_defs: { }
+;; bb 3 artificial_uses: { u12(28){ }u13(32){ }u14(34){ }}
+;; lr  in  	 28 [r28] 32 [__SP_L__] 34 [argL] 42 63
+;; lr  use 	 28 [r28] 32 [__SP_L__] 34 [argL]
+;; lr  def 	 43
+(code_label 45 28 19 3 10 "" [1 uses])
+(note 19 45 21 3 [bb 3] NOTE_INSN_BASIC_BLOCK)
+(insn 21 19 22 3 (set (reg:QI 43 [ D.2082 ])
+        (mem/v:QI (const_int 37 [0x25]) [0 MEM[(volatile uint8_t *)37B]+0 S1 A8])) ledblink.c:45 71 {movqi_insn}
+     (nil))
+(note 22 21 23 3 NOTE_INSN_DELETED)
+(note 23 22 24 3 NOTE_INSN_DELETED)
+(insn 24 23 25 3 (set (cc0)
+        (compare (reg:QI 43 [ D.2082 ])
+            (const_int 0 [0]))) ledblink.c:45 404 {*cmpqi}
+     (expr_list:REG_DEAD (reg:QI 43 [ D.2082 ])
+        (nil)))
+(jump_insn 25 24 26 3 (set (pc)
+        (if_then_else (ne (cc0)
+                (const_int 0 [0]))
+            (label_ref 32)
+            (pc))) ledblink.c:45 428 {branch}
+     (int_list:REG_BR_PROB 5000 (nil))
+ -> 32)
+;;  succ:       4 [50.0%]  (FALLTHRU)
+;;              5 [50.0%] 
+;; lr  out 	 28 [r28] 32 [__SP_L__] 34 [argL] 42 63
+
+;; basic block 4, loop depth 0, count 0, freq 4950, maybe hot
+;;  prev block 3, next block 5, flags: (RTL, MODIFIED)
+;;  pred:       3 [50.0%]  (FALLTHRU)
+;; bb 4 artificial_defs: { }
+;; bb 4 artificial_uses: { u18(28){ }u19(32){ }u20(34){ }}
+;; lr  in  	 28 [r28] 32 [__SP_L__] 34 [argL] 42 63
+;; lr  use 	 28 [r28] 32 [__SP_L__] 34 [argL] 63
+;; lr  def 	
+(note 26 25 29 4 [bb 4] NOTE_INSN_BASIC_BLOCK)
+(insn 29 26 60 4 (set (mem/v:QI (const_int 37 [0x25]) [0 MEM[(volatile uint8_t *)37B]+0 S1 A8])
+        (reg:QI 63)) ledblink.c:46 71 {movqi_insn}
+     (nil))
+(jump_insn 60 29 61 4 (set (pc)
+        (label_ref 39)) 433 {jump}
+     (nil)
+ -> 39)
+;;  succ:       6 [100.0%] 
+;; lr  out 	 28 [r28] 32 [__SP_L__] 34 [argL] 42 63
+
+(barrier 61 60 32)
+;; basic block 5, loop depth 0, count 0, freq 4950, maybe hot
+;;  prev block 4, next block 6, flags: (RTL)
+;;  pred:       3 [50.0%] 
+;; bb 5 artificial_defs: { }
+;; bb 5 artificial_uses: { u22(28){ }u23(32){ }u24(34){ }}
+;; lr  in  	 28 [r28] 32 [__SP_L__] 34 [argL] 42 63
+;; lr  use 	 28 [r28] 32 [__SP_L__] 34 [argL]
+;; lr  def 	 46 47
+(code_label 32 61 33 5 8 "" [1 uses])
+(note 33 32 35 5 [bb 5] NOTE_INSN_BASIC_BLOCK)
+(insn 35 33 36 5 (set (reg:QI 46 [ D.2082 ])
+        (mem/v:QI (const_int 37 [0x25]) [0 MEM[(volatile uint8_t *)37B]+0 S1 A8])) ledblink.c:48 71 {movqi_insn}
+     (nil))
+(insn 36 35 38 5 (set (reg:QI 47 [ D.2082 ])
+        (ashift:QI (reg:QI 46 [ D.2082 ])
+            (const_int 1 [0x1]))) ledblink.c:48 287 {*ashlqi3}
+     (expr_list:REG_DEAD (reg:QI 46 [ D.2082 ])
+        (nil)))
+(insn 38 36 39 5 (set (mem/v:QI (const_int 37 [0x25]) [0 MEM[(volatile uint8_t *)37B]+0 S1 A8])
+        (reg:QI 47 [ D.2082 ])) ledblink.c:48 71 {movqi_insn}
+     (expr_list:REG_DEAD (reg:QI 47 [ D.2082 ])
+        (nil)))
+;;  succ:       6 [100.0%]  (FALLTHRU)
+;; lr  out 	 28 [r28] 32 [__SP_L__] 34 [argL] 42 63
+
+;; basic block 6, loop depth 0, count 0, freq 9900, maybe hot
+;;  prev block 5, next block 7, flags: (RTL)
+;;  pred:       5 [100.0%]  (FALLTHRU)
+;;              4 [100.0%] 
+;; bb 6 artificial_defs: { }
+;; bb 6 artificial_uses: { u27(28){ }u28(32){ }u29(34){ }}
+;; lr  in  	 28 [r28] 32 [__SP_L__] 34 [argL] 42 63
+;; lr  use 	 28 [r28] 32 [__SP_L__] 34 [argL] 42
+;; lr  def 	 42
+(code_label 39 38 40 6 9 "" [1 uses])
+(note 40 39 41 6 [bb 6] NOTE_INSN_BASIC_BLOCK)
+(insn 41 40 42 6 (parallel [
+            (unspec_volatile [
+                    (const_int 1599999 [0x1869ff])
+                    (const_int 3 [0x3])
+                ] UNSPECV_DELAY_CYCLES)
+            (set (mem/v:BLK (scratch:HI) [0  A8])
+                (unspec_volatile:BLK [
+                        (mem/v:BLK (scratch:HI) [0  A8])
+                    ] UNSPECV_MEMORY_BARRIER))
+            (clobber (scratch:QI))
+            (clobber (scratch:QI))
+            (clobber (scratch:QI))
+        ]) /usr/lib/avr/include/util/delay.h:187 459 {delay_cycles_3}
+     (nil))
+(insn 42 41 43 6 (parallel [
+            (unspec_volatile [
+                    (const_int 2 [0x2])
+                ] UNSPECV_NOP)
+            (set (mem/v:BLK (scratch:HI) [0  A8])
+                (unspec_volatile:BLK [
+                        (mem/v:BLK (scratch:HI) [0  A8])
+                    ] UNSPECV_MEMORY_BARRIER))
+        ]) /usr/lib/avr/include/util/delay.h:187 480 {*nopv}
+     (nil))
+(insn 43 42 44 6 (parallel [
+            (unspec_volatile [
+                    (const_int 1 [0x1])
+                ] UNSPECV_NOP)
+            (set (mem/v:BLK (scratch:HI) [0  A8])
+                (unspec_volatile:BLK [
+                        (mem/v:BLK (scratch:HI) [0  A8])
+                    ] UNSPECV_MEMORY_BARRIER))
+        ]) /usr/lib/avr/include/util/delay.h:187 480 {*nopv}
+     (nil))
+(insn 44 43 46 6 (parallel [
+            (set (reg:HI 42 [ D.2081 ])
+                (plus:HI (reg:HI 42 [ D.2081 ])
+                    (const_int -1 [0xffffffffffffffff])))
+            (clobber (scratch:QI))
+        ]) 121 {addhi3_clobber}
+     (nil))
+(insn 46 44 47 6 (parallel [
+            (set (cc0)
+                (compare (reg:HI 42 [ D.2081 ])
+                    (const_int 0 [0])))
+            (clobber (scratch:QI))
+        ]) ledblink.c:43 408 {*cmphi}
+     (nil))
+(jump_insn 47 46 48 6 (set (pc)
+        (if_then_else (ne (cc0)
+                (const_int 0 [0]))
+            (label_ref:HI 45)
+            (pc))) ledblink.c:43 428 {branch}
+     (int_list:REG_BR_PROB 9899 (nil))
+ -> 45)
+;;  succ:       3 [99.0%]  (DFS_BACK)
+;;              7 [1.0%]  (FALLTHRU,LOOP_EXIT)
+;; lr  out 	 28 [r28] 32 [__SP_L__] 34 [argL] 42 63
+
+;; basic block 7, loop depth 0, count 0, freq 100, maybe hot
+;;  prev block 6, next block 1, flags: (RTL)
+;;  pred:       6 [1.0%]  (FALLTHRU,LOOP_EXIT)
+;; bb 7 artificial_defs: { }
+;; bb 7 artificial_uses: { u32(28){ }u33(32){ }u34(34){ }}
+;; lr  in  	 28 [r28] 32 [__SP_L__] 34 [argL]
+;; lr  use 	 28 [r28] 32 [__SP_L__] 34 [argL]
+;; lr  def 	 24 [r24] 25 [r25]
+(note 48 47 49 7 [bb 7] NOTE_INSN_BASIC_BLOCK)
+(insn 49 48 54 7 (asm_operands/v ("sleep
+	") ("") 0 []
+         []
+         [] ledblink.c:54) ledblink.c:54 -1
+     (nil))
+(insn 54 49 55 7 (set (reg/i:HI 24 r24)
+        (const_int 0 [0])) ledblink.c:55 83 {*movhi}
+     (nil))
+(insn 55 54 0 7 (use (reg/i:HI 24 r24)) ledblink.c:55 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+;; lr  out 	 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__] 34 [argL]
+

@@ -1,0 +1,510 @@
+
+;; Function uart_putchar (uart_putchar, funcdef_no=7, decl_uid=2025, cgraph_uid=7, symbol_order=11)
+
+;; 2 loops found
+;;
+;; Loop 0
+;;  header 0, latch 1
+;;  depth 0, outer -1
+;;  nodes: 0 1 2 3 4 5
+;;
+;; Loop 1
+;;  header 4, latch 4
+;;  depth 1, outer 0
+;;  nodes: 4
+;; 2 succs { 3 4 }
+;; 3 succs { 4 }
+;; 4 succs { 4 5 }
+;; 5 succs { 1 }
+starting the processing of deferred insns
+ending the processing of deferred insns
+df_analyze called
+
+
+========== no more changes
+starting the processing of deferred insns
+ending the processing of deferred insns
+
+
+uart_putchar
+
+Dataflow summary:
+;;  invalidated by call 	 0 [r0] 1 [r1] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 26 [r26] 27 [r27] 30 [r30] 31 [r31] 33 [__SP_H__] 35 [argH]
+;;  hardware regs used 	 32 [__SP_L__]
+;;  regular block artificial uses 	 32 [__SP_L__]
+;;  eh block artificial uses 	 32 [__SP_L__] 34 [argL]
+;;  entry block defs 	 2 [r2] 8 [r8] 9 [r9] 10 [r10] 11 [r11] 12 [r12] 13 [r13] 14 [r14] 15 [r15] 16 [r16] 17 [r17] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__]
+;;  exit block uses 	 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__]
+;;  regs ever live 	 22[r22] 23[r23] 24[r24] 25[r25] 28[r28] 32[__SP_L__] 33[__SP_H__]
+;;  ref usage 	r0={1d} r1={1d} r2={1d} r8={1d} r9={1d} r10={1d} r11={1d} r12={1d} r13={1d} r14={1d} r15={1d} r16={1d} r17={1d} r18={2d} r19={2d} r20={2d} r21={2d} r22={2d,1u} r23={2d,1u} r24={5d,5u} r25={4d,2u} r26={1d} r27={1d} r28={3d,4u} r30={1d} r31={1d} r32={3d,8u} r33={3d,2u} r35={1d} 
+;;    total ref usage 71{48d,23u,0e} in 13{12 regular + 1 call} insns.
+(note 1 0 5 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 900, maybe hot
+;;  prev block 0, next block 3, flags: (RTL)
+;;  pred:       ENTRY [100.0%]  (FALLTHRU)
+;; bb 2 artificial_defs: { }
+;; bb 2 artificial_uses: { u-1(32){ }}
+;; lr  in  	 22 [r22] 23 [r23] 24 [r24] 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; lr  use 	 24 [r24] 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; lr  def 	 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; live  in  	 22 [r22] 23 [r23] 24 [r24] 28 [r28] 32 [__SP_L__]
+;; live  gen 	 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; live  kill	
+(note 5 1 41 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(insn/f 41 5 42 2 (set (mem/c:QI (post_dec:HI (reg/f:HI 32 __SP_L__)) [2  S1 A8])
+        (reg:QI 28 r28)) ledblink.c:20 -1
+     (expr_list:REG_DEAD (reg:QI 28 r28)
+        (nil)))
+(note 42 41 2 2 NOTE_INSN_PROLOGUE_END)
+(insn 2 42 4 2 (set (reg/v:QI 28 r28 [orig:46 c ] [46])
+        (reg:QI 24 r24 [ c ])) ledblink.c:20 71 {movqi_insn}
+     (expr_list:REG_DEAD (reg:QI 24 r24 [ c ])
+        (nil)))
+(note 4 2 7 2 NOTE_INSN_FUNCTION_BEG)
+(insn 7 4 8 2 (set (cc0)
+        (compare (reg/v:QI 28 r28 [orig:46 c ] [46])
+            (const_int 10 [0xa]))) ledblink.c:21 404 {*cmpqi}
+     (nil))
+(jump_insn 8 7 9 2 (set (pc)
+        (if_then_else (ne (cc0)
+                (const_int 0 [0]))
+            (label_ref:HI 18)
+            (pc))) ledblink.c:21 428 {branch}
+     (int_list:REG_BR_PROB 8629 (nil))
+ -> 18)
+;;  succ:       3 [13.7%]  (FALLTHRU)
+;;              4 [86.3%] 
+;; lr  out 	 22 [r22] 23 [r23] 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; live  out 	 22 [r22] 23 [r23] 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+
+;; basic block 3, loop depth 0, count 0, freq 123, maybe hot
+;;  prev block 2, next block 4, flags: (RTL)
+;;  pred:       2 [13.7%]  (FALLTHRU)
+;; bb 3 artificial_defs: { }
+;; bb 3 artificial_uses: { u-1(32){ }}
+;; lr  in  	 22 [r22] 23 [r23] 28 [r28] 32 [__SP_L__]
+;; lr  use 	 22 [r22] 23 [r23] 32 [__SP_L__]
+;; lr  def 	 0 [r0] 1 [r1] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 26 [r26] 27 [r27] 30 [r30] 31 [r31] 33 [__SP_H__] 35 [argH]
+;; live  in  	 22 [r22] 23 [r23] 28 [r28] 32 [__SP_L__]
+;; live  gen 	 24 [r24] 25 [r25]
+;; live  kill	
+(note 9 8 11 3 [bb 3] NOTE_INSN_BASIC_BLOCK)
+(insn 11 9 12 3 (set (reg:QI 24 r24)
+        (const_int 13 [0xd])) ledblink.c:22 71 {movqi_insn}
+     (nil))
+(call_insn 12 11 18 3 (parallel [
+            (set (reg:HI 24 r24)
+                (call (mem:HI (symbol_ref:HI ("uart_putchar") [flags 0x3]  <function_decl 0x7fce25999af8 uart_putchar>) [0 uart_putchar S2 A8])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+        ]) ledblink.c:22 435 {call_value_insn}
+     (expr_list:REG_DEAD (reg:HI 22 r22)
+        (expr_list:REG_UNUSED (reg:HI 24 r24)
+            (expr_list:REG_CALL_DECL (symbol_ref:HI ("uart_putchar") [flags 0x3]  <function_decl 0x7fce25999af8 uart_putchar>)
+                (expr_list:REG_EH_REGION (const_int 0 [0])
+                    (nil)))))
+    (expr_list:QI (use (reg:QI 24 r24))
+        (expr_list:HI (use (reg:HI 22 r22))
+            (nil))))
+;;  succ:       4 [100.0%]  (FALLTHRU)
+;; lr  out 	 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; live  out 	 28 [r28] 32 [__SP_L__]
+
+;; basic block 4, loop depth 0, count 0, freq 10000, maybe hot
+;;  prev block 3, next block 5, flags: (RTL)
+;;  pred:       3 [100.0%]  (FALLTHRU)
+;;              4 [91.0%] 
+;;              2 [86.3%] 
+;; bb 4 artificial_defs: { }
+;; bb 4 artificial_uses: { u-1(32){ }}
+;; lr  in  	 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; lr  use 	 32 [__SP_L__]
+;; lr  def 	 24 [r24]
+;; live  in  	 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; live  gen 	 24 [r24]
+;; live  kill	
+(code_label 18 12 15 4 3 "" [2 uses])
+(note 15 18 17 4 [bb 4] NOTE_INSN_BASIC_BLOCK)
+(insn 17 15 19 4 (set (reg:QI 24 r24 [orig:43 D.2072 ] [43])
+        (mem/v:QI (const_int 192 [0xc0]) [0 MEM[(volatile uint8_t *)192B]+0 S1 A8])) ledblink.c:23 71 {movqi_insn}
+     (nil))
+(note 19 17 20 4 NOTE_INSN_DELETED)
+(note 20 19 21 4 NOTE_INSN_DELETED)
+(jump_insn 21 20 22 4 (set (pc)
+        (if_then_else (eq (zero_extract:QI (reg:QI 24 r24 [orig:43 D.2072 ] [43])
+                    (const_int 1 [0x1])
+                    (const_int 5 [0x5]))
+                (const_int 0 [0]))
+            (label_ref:HI 18)
+            (pc))) ledblink.c:23 419 {*sbrx_branchqi}
+     (expr_list:REG_DEAD (reg:QI 24 r24 [orig:43 D.2072 ] [43])
+        (int_list:REG_BR_PROB 9100 (nil)))
+ -> 18)
+;;  succ:       4 [91.0%] 
+;;              5 [9.0%]  (FALLTHRU,LOOP_EXIT)
+;; lr  out 	 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; live  out 	 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+
+;; basic block 5, loop depth 0, count 0, freq 900, maybe hot
+;;  prev block 4, next block 1, flags: (RTL)
+;;  pred:       4 [9.0%]  (FALLTHRU,LOOP_EXIT)
+;; bb 5 artificial_defs: { }
+;; bb 5 artificial_uses: { u-1(32){ }}
+;; lr  in  	 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; lr  use 	 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; lr  def 	 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; live  in  	 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; live  gen 	 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__] 33 [__SP_H__]
+;; live  kill	
+(note 22 21 25 5 [bb 5] NOTE_INSN_BASIC_BLOCK)
+(insn 25 22 30 5 (set (mem/v:QI (const_int 198 [0xc6]) [0 MEM[(volatile uint8_t *)198B]+0 S1 A8])
+        (reg/v:QI 28 r28 [orig:46 c ] [46])) ledblink.c:24 71 {movqi_insn}
+     (expr_list:REG_DEAD (reg/v:QI 28 r28 [orig:46 c ] [46])
+        (nil)))
+(insn 30 25 31 5 (set (reg/i:HI 24 r24)
+        (const_int 0 [0])) ledblink.c:26 83 {*movhi}
+     (nil))
+(insn 31 30 43 5 (use (reg/i:HI 24 r24)) ledblink.c:26 -1
+     (nil))
+(note 43 31 44 5 NOTE_INSN_EPILOGUE_BEG)
+(insn 44 43 45 5 (set (reg:QI 28 r28)
+        (mem/c:QI (pre_inc:HI (reg/f:HI 32 __SP_L__)) [2  S1 A8])) ledblink.c:26 -1
+     (expr_list:REG_UNUSED (reg:QI 33 __SP_H__)
+        (nil)))
+(jump_insn 45 44 46 5 (return) ledblink.c:26 -1
+     (nil)
+ -> return)
+;;  succ:       EXIT [100.0%] 
+;; lr  out 	 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__]
+;; live  out 	 24 [r24] 25 [r25] 28 [r28] 32 [__SP_L__]
+
+(barrier 46 45 39)
+(note 39 46 0 NOTE_INSN_DELETED)
+
+;; Function main (main, funcdef_no=8, decl_uid=2030, cgraph_uid=8, symbol_order=13) (executed once)
+
+;; 2 loops found
+;;
+;; Loop 0
+;;  header 0, latch 1
+;;  depth 0, outer -1
+;;  nodes: 0 1 2 3 4 5 6 7
+;;
+;; Loop 1
+;;  header 3, latch 6
+;;  depth 1, outer 0
+;;  nodes: 3 6 5 4
+;; 2 succs { 3 }
+;; 3 succs { 4 5 }
+;; 4 succs { 6 }
+;; 5 succs { 6 }
+;; 6 succs { 3 7 }
+;; 7 succs { 1 }
+starting the processing of deferred insns
+ending the processing of deferred insns
+df_analyze called
+
+IF-CASE-1 found, start 3, then 4
+
+IF-CASE-2 found, start 3, else 5
+
+
+========== no more changes
+
+2 possible IF blocks searched.
+0 IF blocks converted.
+0 true changes made.
+
+
+starting the processing of deferred insns
+ending the processing of deferred insns
+
+
+main
+
+Dataflow summary:
+;;  invalidated by call 	 0 [r0] 1 [r1] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 26 [r26] 27 [r27] 30 [r30] 31 [r31] 33 [__SP_H__] 35 [argH]
+;;  hardware regs used 	 32 [__SP_L__]
+;;  regular block artificial uses 	 32 [__SP_L__]
+;;  eh block artificial uses 	 32 [__SP_L__] 34 [argL]
+;;  entry block defs 	 2 [r2] 8 [r8] 9 [r9] 10 [r10] 11 [r11] 12 [r12] 13 [r13] 14 [r14] 15 [r15] 16 [r16] 17 [r17] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 32 [__SP_L__]
+;;  exit block uses 	 24 [r24] 25 [r25] 32 [__SP_L__]
+;;  regs ever live 	 18[r18] 19[r19] 20[r20] 21[r21] 24[r24] 25[r25] 32[__SP_L__]
+;;  ref usage 	r0={2d} r1={2d} r2={1d} r8={1d} r9={1d} r10={1d} r11={1d} r12={1d} r13={1d} r14={1d} r15={1d} r16={1d} r17={1d} r18={7d,3u} r19={4d,1u} r20={4d} r21={4d} r22={3d} r23={3d} r24={11d,9u} r25={11d,7u} r26={2d} r27={2d} r30={2d} r31={2d} r32={1d,9u} r33={2d} r35={2d} 
+;;    total ref usage 104{75d,29u,0e} in 30{28 regular + 2 call} insns.
+(note 1 0 4 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 100, maybe hot
+;;  prev block 0, next block 3, flags: (RTL)
+;;  pred:       ENTRY [100.0%]  (FALLTHRU)
+;; bb 2 artificial_defs: { }
+;; bb 2 artificial_uses: { u-1(32){ }}
+;; lr  in  	 32 [__SP_L__]
+;; lr  use 	 32 [__SP_L__]
+;; lr  def 	 0 [r0] 1 [r1] 18 [r18] 19 [r19] 20 [r20] 21 [r21] 22 [r22] 23 [r23] 24 [r24] 25 [r25] 26 [r26] 27 [r27] 30 [r30] 31 [r31] 33 [__SP_H__] 35 [argH]
+;; live  in  	 32 [__SP_L__]
+;; live  gen 	 19 [r19] 24 [r24] 25 [r25]
+;; live  kill	
+(note 4 1 64 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 64 4 2 2 NOTE_INSN_PROLOGUE_END)
+(note 2 64 7 2 NOTE_INSN_FUNCTION_BEG)
+(insn 7 2 8 2 (set (reg:QI 24 r24 [50])
+        (const_int -1 [0xffffffffffffffff])) ledblink.c:34 71 {movqi_insn}
+     (expr_list:REG_EQUIV (const_int -1 [0xffffffffffffffff])
+        (nil)))
+(insn 8 7 10 2 (set (mem/v:QI (const_int 36 [0x24]) [0 MEM[(volatile uint8_t *)36B]+0 S1 A8])
+        (reg:QI 24 r24 [50])) ledblink.c:34 71 {movqi_insn}
+     (expr_list:REG_DEAD (reg:QI 24 r24 [50])
+        (nil)))
+(insn 10 8 11 2 (set (reg/f:HI 24 r24 [52])
+        (symbol_ref:HI ("mystdout") [flags 0x2]  <var_decl 0x7fce25975bd0 mystdout>)) ledblink.c:36 83 {*movhi}
+     (expr_list:REG_EQUIV (symbol_ref:HI ("mystdout") [flags 0x2]  <var_decl 0x7fce25975bd0 mystdout>)
+        (nil)))
+(insn 11 10 12 2 (set (mem/f:HI (const:HI (plus:HI (symbol_ref:HI ("__iob") [flags 0x40]  <var_decl 0x7fce25975360 __iob>)
+                    (const_int 2 [0x2]))) [1 __iob+2 S2 A8])
+        (reg/f:HI 24 r24 [52])) ledblink.c:36 83 {*movhi}
+     (expr_list:REG_DEAD (reg/f:HI 24 r24 [52])
+        (nil)))
+(insn 12 11 13 2 (set (reg:HI 24 r24)
+        (symbol_ref/f:HI ("*.LC0") [flags 0x2]  <var_decl 0x7fce259bb6c0 *.LC0>)) ledblink.c:37 83 {*movhi}
+     (nil))
+(call_insn 13 12 15 2 (parallel [
+            (set (reg:HI 24 r24)
+                (call (mem:HI (symbol_ref:HI ("puts") [flags 0x41]  <function_decl 0x7fce258a71b0 __builtin_puts>) [0 __builtin_puts S2 A8])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+        ]) ledblink.c:37 435 {call_value_insn}
+     (expr_list:REG_UNUSED (reg:HI 24 r24)
+        (expr_list:REG_CALL_DECL (symbol_ref:HI ("puts") [flags 0x41]  <function_decl 0x7fce258a71b0 __builtin_puts>)
+            (nil)))
+    (expr_list:HI (use (reg:HI 24 r24))
+        (nil)))
+(insn 15 13 16 2 (set (reg:QI 24 r24 [54])
+        (const_int 1 [0x1])) ledblink.c:41 71 {movqi_insn}
+     (expr_list:REG_EQUIV (const_int 1 [0x1])
+        (nil)))
+(insn 16 15 17 2 (set (mem/v:QI (const_int 37 [0x25]) [0 MEM[(volatile uint8_t *)37B]+0 S1 A8])
+        (reg:QI 24 r24 [54])) ledblink.c:41 71 {movqi_insn}
+     (expr_list:REG_DEAD (reg:QI 24 r24 [54])
+        (nil)))
+(insn 17 16 18 2 (set (reg:HI 24 r24)
+        (symbol_ref/f:HI ("*.LC1") [flags 0x2]  <var_decl 0x7fce259bb750 *.LC1>)) ledblink.c:42 83 {*movhi}
+     (nil))
+(call_insn 18 17 3 2 (parallel [
+            (set (reg:HI 24 r24)
+                (call (mem:HI (symbol_ref:HI ("puts") [flags 0x41]  <function_decl 0x7fce258a71b0 __builtin_puts>) [0 __builtin_puts S2 A8])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+        ]) ledblink.c:42 435 {call_value_insn}
+     (expr_list:REG_UNUSED (reg:HI 24 r24)
+        (expr_list:REG_CALL_DECL (symbol_ref:HI ("puts") [flags 0x41]  <function_decl 0x7fce258a71b0 __builtin_puts>)
+            (nil)))
+    (expr_list:HI (use (reg:HI 24 r24))
+        (nil)))
+(insn 3 18 28 2 (set (reg:HI 24 r24 [orig:42 D.2081 ] [42])
+        (const_int 100 [0x64])) ledblink.c:42 83 {*movhi}
+     (expr_list:REG_EQUAL (const_int 100 [0x64])
+        (nil)))
+(insn 28 3 45 2 (set (reg:QI 19 r19 [63])
+        (const_int 1 [0x1])) ledblink.c:46 71 {movqi_insn}
+     (expr_list:REG_EQUIV (const_int 1 [0x1])
+        (nil)))
+;;  succ:       3 [100.0%]  (FALLTHRU)
+;; lr  out 	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; live  out 	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+
+;; basic block 3, loop depth 0, count 0, freq 9900, maybe hot
+;;  prev block 2, next block 4, flags: (RTL)
+;;  pred:       6 [99.0%]  (DFS_BACK)
+;;              2 [100.0%]  (FALLTHRU)
+;; bb 3 artificial_defs: { }
+;; bb 3 artificial_uses: { u-1(32){ }}
+;; lr  in  	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; lr  use 	 32 [__SP_L__]
+;; lr  def 	 18 [r18]
+;; live  in  	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; live  gen 	 18 [r18]
+;; live  kill	
+(code_label 45 28 19 3 10 "" [1 uses])
+(note 19 45 21 3 [bb 3] NOTE_INSN_BASIC_BLOCK)
+(insn 21 19 22 3 (set (reg:QI 18 r18 [orig:43 D.2082 ] [43])
+        (mem/v:QI (const_int 37 [0x25]) [0 MEM[(volatile uint8_t *)37B]+0 S1 A8])) ledblink.c:45 71 {movqi_insn}
+     (nil))
+(note 22 21 23 3 NOTE_INSN_DELETED)
+(note 23 22 24 3 NOTE_INSN_DELETED)
+(insn 24 23 25 3 (set (cc0)
+        (compare (reg:QI 18 r18 [orig:43 D.2082 ] [43])
+            (const_int 0 [0]))) ledblink.c:45 404 {*cmpqi}
+     (expr_list:REG_DEAD (reg:QI 18 r18 [orig:43 D.2082 ] [43])
+        (nil)))
+(jump_insn 25 24 26 3 (set (pc)
+        (if_then_else (ne (cc0)
+                (const_int 0 [0]))
+            (label_ref 32)
+            (pc))) ledblink.c:45 428 {branch}
+     (int_list:REG_BR_PROB 5000 (nil))
+ -> 32)
+;;  succ:       4 [50.0%]  (FALLTHRU)
+;;              5 [50.0%] 
+;; lr  out 	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; live  out 	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+
+;; basic block 4, loop depth 0, count 0, freq 4950, maybe hot
+;;  prev block 3, next block 5, flags: (RTL)
+;;  pred:       3 [50.0%]  (FALLTHRU)
+;; bb 4 artificial_defs: { }
+;; bb 4 artificial_uses: { u-1(32){ }}
+;; lr  in  	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; lr  use 	 19 [r19] 32 [__SP_L__]
+;; lr  def 	
+;; live  in  	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; live  gen 	
+;; live  kill	
+(note 26 25 29 4 [bb 4] NOTE_INSN_BASIC_BLOCK)
+(insn 29 26 60 4 (set (mem/v:QI (const_int 37 [0x25]) [0 MEM[(volatile uint8_t *)37B]+0 S1 A8])
+        (reg:QI 19 r19 [63])) ledblink.c:46 71 {movqi_insn}
+     (nil))
+(jump_insn 60 29 61 4 (set (pc)
+        (label_ref 39)) 433 {jump}
+     (nil)
+ -> 39)
+;;  succ:       6 [100.0%] 
+;; lr  out 	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; live  out 	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+
+(barrier 61 60 32)
+;; basic block 5, loop depth 0, count 0, freq 4950, maybe hot
+;;  prev block 4, next block 6, flags: (RTL)
+;;  pred:       3 [50.0%] 
+;; bb 5 artificial_defs: { }
+;; bb 5 artificial_uses: { u-1(32){ }}
+;; lr  in  	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; lr  use 	 32 [__SP_L__]
+;; lr  def 	 18 [r18]
+;; live  in  	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; live  gen 	 18 [r18]
+;; live  kill	
+(code_label 32 61 33 5 8 "" [1 uses])
+(note 33 32 35 5 [bb 5] NOTE_INSN_BASIC_BLOCK)
+(insn 35 33 36 5 (set (reg:QI 18 r18 [orig:46 D.2082 ] [46])
+        (mem/v:QI (const_int 37 [0x25]) [0 MEM[(volatile uint8_t *)37B]+0 S1 A8])) ledblink.c:48 71 {movqi_insn}
+     (nil))
+(insn 36 35 38 5 (set (reg:QI 18 r18 [orig:47 D.2082 ] [47])
+        (ashift:QI (reg:QI 18 r18 [orig:46 D.2082 ] [46])
+            (const_int 1 [0x1]))) ledblink.c:48 287 {*ashlqi3}
+     (nil))
+(insn 38 36 39 5 (set (mem/v:QI (const_int 37 [0x25]) [0 MEM[(volatile uint8_t *)37B]+0 S1 A8])
+        (reg:QI 18 r18 [orig:47 D.2082 ] [47])) ledblink.c:48 71 {movqi_insn}
+     (expr_list:REG_DEAD (reg:QI 18 r18 [orig:47 D.2082 ] [47])
+        (nil)))
+;;  succ:       6 [100.0%]  (FALLTHRU)
+;; lr  out 	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; live  out 	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+
+;; basic block 6, loop depth 0, count 0, freq 9900, maybe hot
+;;  prev block 5, next block 7, flags: (RTL)
+;;  pred:       5 [100.0%]  (FALLTHRU)
+;;              4 [100.0%] 
+;; bb 6 artificial_defs: { }
+;; bb 6 artificial_uses: { u-1(32){ }}
+;; lr  in  	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; lr  use 	 24 [r24] 25 [r25] 32 [__SP_L__]
+;; lr  def 	 18 [r18] 20 [r20] 21 [r21] 24 [r24] 25 [r25]
+;; live  in  	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; live  gen 	 24 [r24] 25 [r25]
+;; live  kill	 18 [r18] 20 [r20] 21 [r21]
+(code_label 39 38 40 6 9 "" [1 uses])
+(note 40 39 41 6 [bb 6] NOTE_INSN_BASIC_BLOCK)
+(insn 41 40 42 6 (parallel [
+            (unspec_volatile [
+                    (const_int 1599999 [0x1869ff])
+                    (const_int 3 [0x3])
+                ] UNSPECV_DELAY_CYCLES)
+            (set (mem/v:BLK (scratch:HI) [0  A8])
+                (unspec_volatile:BLK [
+                        (mem/v:BLK (scratch:HI) [0  A8])
+                    ] UNSPECV_MEMORY_BARRIER))
+            (clobber (reg:QI 18 r18))
+            (clobber (reg:QI 20 r20))
+            (clobber (reg:QI 21 r21))
+        ]) /usr/lib/avr/include/util/delay.h:187 459 {delay_cycles_3}
+     (expr_list:REG_UNUSED (reg:QI 21 r21)
+        (expr_list:REG_UNUSED (reg:QI 20 r20)
+            (expr_list:REG_UNUSED (reg:QI 18 r18)
+                (nil)))))
+(insn 42 41 43 6 (parallel [
+            (unspec_volatile [
+                    (const_int 2 [0x2])
+                ] UNSPECV_NOP)
+            (set (mem/v:BLK (scratch:HI) [0  A8])
+                (unspec_volatile:BLK [
+                        (mem/v:BLK (scratch:HI) [0  A8])
+                    ] UNSPECV_MEMORY_BARRIER))
+        ]) /usr/lib/avr/include/util/delay.h:187 480 {*nopv}
+     (nil))
+(insn 43 42 44 6 (parallel [
+            (unspec_volatile [
+                    (const_int 1 [0x1])
+                ] UNSPECV_NOP)
+            (set (mem/v:BLK (scratch:HI) [0  A8])
+                (unspec_volatile:BLK [
+                        (mem/v:BLK (scratch:HI) [0  A8])
+                    ] UNSPECV_MEMORY_BARRIER))
+        ]) /usr/lib/avr/include/util/delay.h:187 480 {*nopv}
+     (nil))
+(insn 44 43 46 6 (parallel [
+            (set (reg:HI 24 r24 [orig:42 D.2081 ] [42])
+                (plus:HI (reg:HI 24 r24 [orig:42 D.2081 ] [42])
+                    (const_int -1 [0xffffffffffffffff])))
+            (clobber (scratch:QI))
+        ]) 121 {addhi3_clobber}
+     (nil))
+(insn 46 44 47 6 (parallel [
+            (set (cc0)
+                (compare (reg:HI 24 r24 [orig:42 D.2081 ] [42])
+                    (const_int 0 [0])))
+            (clobber (scratch:QI))
+        ]) ledblink.c:43 408 {*cmphi}
+     (nil))
+(jump_insn 47 46 48 6 (set (pc)
+        (if_then_else (ne (cc0)
+                (const_int 0 [0]))
+            (label_ref:HI 45)
+            (pc))) ledblink.c:43 428 {branch}
+     (int_list:REG_BR_PROB 9899 (nil))
+ -> 45)
+;;  succ:       3 [99.0%]  (DFS_BACK)
+;;              7 [1.0%]  (FALLTHRU,LOOP_EXIT)
+;; lr  out 	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+;; live  out 	 19 [r19] 24 [r24] 25 [r25] 32 [__SP_L__]
+
+;; basic block 7, loop depth 0, count 0, freq 100, maybe hot
+;;  prev block 6, next block 1, flags: (RTL)
+;;  pred:       6 [1.0%]  (FALLTHRU,LOOP_EXIT)
+;; bb 7 artificial_defs: { }
+;; bb 7 artificial_uses: { u-1(32){ }}
+;; lr  in  	 32 [__SP_L__]
+;; lr  use 	 32 [__SP_L__]
+;; lr  def 	 24 [r24] 25 [r25]
+;; live  in  	 32 [__SP_L__]
+;; live  gen 	 24 [r24] 25 [r25]
+;; live  kill	
+(note 48 47 49 7 [bb 7] NOTE_INSN_BASIC_BLOCK)
+(insn 49 48 54 7 (asm_operands/v ("sleep
+	") ("") 0 []
+         []
+         [] ledblink.c:54) ledblink.c:54 -1
+     (nil))
+(insn 54 49 55 7 (set (reg/i:HI 24 r24)
+        (const_int 0 [0])) ledblink.c:55 83 {*movhi}
+     (nil))
+(insn 55 54 66 7 (use (reg/i:HI 24 r24)) ledblink.c:55 -1
+     (nil))
+(jump_insn 66 55 65 7 (return) ledblink.c:55 -1
+     (nil)
+ -> return)
+;;  succ:       EXIT [100.0%] 
+;; lr  out 	 24 [r24] 25 [r25] 32 [__SP_L__]
+;; live  out 	 24 [r24] 25 [r25] 32 [__SP_L__]
+
+(barrier 65 66 62)
+(note 62 65 0 NOTE_INSN_DELETED)
