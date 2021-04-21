@@ -40,7 +40,7 @@ main ()
 	i = 0;
 	PORTB = 0x01;
 	printf("defined i successfully\n");
-	while (i < 1000)
+	while (i < 10)
 	{
 		PORTB = PORTB << 1;
 		_delay_ms(1000);

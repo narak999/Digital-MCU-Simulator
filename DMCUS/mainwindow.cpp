@@ -24,18 +24,20 @@
 
 MainWindow::MainWindow(){
     QList<Component> comps;
-    QWidget *widget = new QWidget;
+    QTabWidget *widget = new QTabWidget;
+    setCentralWidget(widget);
+    QWidget *newWidget = new QWidget();
+    widget->addTab(newWidget, "New Tab");
+
     QLabel *label = new QLabel;
     QPixmap canvas(1920, 1080);
     canvas.fill();
     label->setPixmap(canvas);
-    setCentralWidget(widget);
+    widget->setStyleSheet("background -colo: red:");
     widget->setAcceptDrops(true);
     setMouseTracking(true);
-//    widget->setTabsClosable(true);
-//    widget->setTabPosition(QTabWidget::South);
-//    QWidget *newWidget = new QWidget();
-//    widget->addTab(newWidget, "New Tab");
+    widget->setTabsClosable(true);
+    widget->setTabPosition(QTabWidget::South);
 
     QWidget *topFiller = new QWidget;
     topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -68,6 +70,10 @@ MainWindow::MainWindow(){
 
 void MainWindow::mouseMoveEvent(QMouseEvent *e)
 {
+    tx = e->pos().x();
+    ty = e->pos().y();
+    cx1 = e->pos().x();
+    cy1 = e->pos().y();
     qDebug() << e->pos();
 }
 
@@ -76,14 +82,41 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
     qDebug() << e->pos();
 }
 
-void MainWindow::paintEvent(ViewPainter *e)
+void MainWindow::paintEvent(QPaintEvent *e)
 {
-
+    drawRes();
+    update();
 }
 
-void MainWindow::drawRes(ViewPainter *e)
+void MainWindow::drawRes()
 {
+//    QPainter painter(this);
+//    QPen paintpen, pointpen;
+//    QPoint p1, p2;
+//    paintpen.setColor(Qt::darkBlue);
+//    paintpen.setWidth(2);
+//    pointpen.setColor(Qt::red);
+//    pointpen.setWidth(4);
 
+//    painter.setPen(paintpen);
+
+//    //Resistor painting
+//    painter.drawLine(tx-5, ty+8, tx+5, ty-8);
+//    painter.drawLine(tx+5, ty-8, tx+15, ty+8);
+//    painter.drawLine(tx+15, ty+8, tx+25, ty-8);
+//    painter.drawLine(tx+25, ty-8, tx+30, ty);
+//    painter.drawLine(tx+30, ty, tx+40, ty);
+//    painter.drawLine(tx-5, ty+8, tx-15, ty-8);
+//    painter.drawLine(tx-15, ty-8, tx-25, ty+8);
+//    painter.drawLine(tx-25, ty+8, tx-30, ty);
+//    painter.drawLine(tx-30, ty, tx-40, ty);
+
+//    p1.setX(tx+40); p1.setY(ty);
+//    p2.setX(tx-40); p2.setY(ty);
+
+//    painter.setPen(pointpen);
+//    painter.drawPoint(p1);
+//    painter.drawPoint(p2);
 }
 
 void MainWindow::drawGND()

@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtGui>
+#include <QtCore>
+#include <QDialog>
+#include <QGraphicsView>
+
 #include "viewpainter.h"
 #include "component.h"
 
@@ -39,9 +44,8 @@ public:
 
     int resCounter = 0;
     int capCounter = 0;
-    int gndCounter = 0;
     int indCounter = 0;
-    int wireCounter = 0;
+    int srcCounter = 0;
     bool drawmode = false;
     int compChoice;
 
@@ -50,7 +54,7 @@ protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
 #endif // QT_NO_CONTEXTMENU
 
-    virtual void paintEvent(ViewPainter *e);
+    virtual void paintEvent(QPaintEvent *e) override;
     virtual void mouseMoveEvent(QMouseEvent *e) override;
     virtual void mousePressEvent(QMouseEvent *e) override;
 
@@ -91,12 +95,14 @@ private:
     void createToolbar();
     void fillCompBox();
     void setLayout();
-    void drawRes(ViewPainter *e);
+    void drawRes();
     void drawGND();
     void drawCap();
     void drawInd();
     void drawWire();
 
+    QGraphicsView *scene;
+    QGraphicsEllipseItem *ellipse;
     QMenu *fileMenu, *editMenu, *viewMenu, *aboutQtMenu;
     QMenu *projMenu;
     QProcess *runExe;

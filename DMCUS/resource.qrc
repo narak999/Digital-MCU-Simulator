@@ -19,6 +19,8 @@
         <file>icons/zoomOut.png</file>
         <file>icons/fileOpen.png</file>
         <file>icons/delete.png</file>
+        <file>icons/netlist.png</file>
+        <file>icons/battery.png</file>
     </qresource>
     <qresource prefix="/bitmaps">
         <file>bitmaps/capacitor.png</file>
@@ -28,5 +30,6 @@
         <file>bitmaps/resistor.png</file>
         <file>bitmaps/wire.png</file>
         <file>bitmaps/code.png</file>
+        <file>bitmaps/empty.xpm</file>
     </qresource>
 </RCC>

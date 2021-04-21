@@ -22,9 +22,10 @@ public:
     QList<Area *>     Ellips;
     QList<Port *>     Ports;
     QList<Text *>     Texts;
-    QString name;
-    double value;
-
+    QString name, netName, value, n1, n2, acdc, srcType;
+    QString v1, v2, td1, td2, tr, tau1, tau2, pw, period, v_offset, v_peak, f, df, phase,
+            posNode, negNode;
+    bool isSource;
 
     int  tx, ty;
 };
