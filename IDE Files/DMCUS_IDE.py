@@ -9,7 +9,7 @@ from pygments.lexers.c_cpp import CLexer, CppLexer
 import os
 import webbrowser
 import signal
-import Pmw
+#import Pmw
 
 
 global open_status_name
@@ -91,7 +91,7 @@ def open_file(a):
     file_name = name_path_split[0]
     file_type = name_split[-1]
     name_list.remove(file_name_path)
-    file_location = "\\".join(name_list)
+    file_location = "/".join(name_list)
     status_bar.config(text=f'{name}    ')
     root.title(f'{file_name_path} - TextPad!')
 
@@ -125,7 +125,8 @@ def save_as(a):
     global file_location
     global saved_file
     global file_type
-    text_file = filedialog.asksaveasfilename(defaultextension=".*", initialdir="C:", title="Save File", filetypes=(("C Files", "*.c"), ("C++ Files", "*.cpp")))
+    text_file = filedialog.asksaveasfilename(defaultextension=".c", initialdir="/home/narak/Desktop", title="Save File", filetypes=(("C Files", "*.c"), ("C++ Files", "*.cpp")))
+    print(text_file)
     if text_file:
         name = text_file
         saved_file = True
@@ -237,12 +238,13 @@ def find_text(a):
 
 
 def about_us():
-    about_win = tkinter.Toplevel()
+    tkinter.messagebox.showinfo(title="About Us", message="Texas A&M University\nVersion 1.0.0\n© 2020 All Rights Reserved\n\nDigital MCU Simulator is an application that combines an IDE,\n a Microcontroller Simulator, a Waveform, \nand a Hardware Communication System. \n\nThis application is meant for educational use only.\n\nCreated by: Bunnarak Theng\n            Anvesh Kandi\n            Jonathan Howard\n            Jose Santos")
+    """about_win = tkinter.Toplevel()
     about_win.wm_title("About Digital MCU Simulator")
     about_win.geometry("350x250")
     about_win.attributes("-toolwindow", True)
     label1 = tk.Label(about_win, text="Texas A&M University\nVersion 1.0.0\n© 2020 All Rights Reserved\n\nDigital MCU Simulator is an application that combines an IDE,\n a Microcontroller Simulator, a Waveform, \nand a Hardware Communication System. \n\nThis application is meant for educational use only.\n\nCreated by: Bunnarak Theng\n            Anvesh Kandi\n            Jonathan Howard\n            Jose Santos")
-    label1.pack(side=tk.LEFT, padx=10, pady=10)
+    label1.pack(side=tk.LEFT, padx=10, pady=10)"""
 
 
 def compile(a):
@@ -259,28 +261,29 @@ def compile(a):
     if saved_file:
         check = check_for_compiler()
         if check:
-            os.chdir(r"{}".format(file_location))
+            os.chdir(file_location)
             f = open("Makefile", "w")
             if file_type.lower() == "c":
-                f.write("PORT=\\\\\\\\.\\\\GLOBALROOT\\\\Device\\\\USBSER000\n"
-                        "MCU=atmega328p\n"
-                        "CFLAGS=-c -Os -Wall -DF_CPU=16000000L\n"
+                f.write("MCU=atmega88\n"
+                        "CFLAGS=-Wall -gdwarf-2 -Os -std=gnu99 -DF_CPU=8000000 -fno-inline-small-functions "
+                        "-ffunction-sections -fdata-sections -Wl,--relax,--gc-sections -Wl,--undefined=_mmcu"
+                        ",--section-start=.mmcu=0x910000 -I ~/Desktop/simavr/simavr/sim "
+                        "-I ~/Desktop/simavr/simavr/sim/avr\n"
                         "CC=avr-gcc\n"
                         "OBJCOPY=avr-objcopy\n\n"
                         f"TARGET={file_name}\n\n"
                         "$(TARGET).hex: $(TARGET).elf\n\t"
-                        "$(OBJCOPY) -O ihex -R .eeprom $(TARGET).elf $(TARGET).hex\n\n"
-                        "$(TARGET).elf: $(TARGET).o\n\t"
-                        "$(CC) -mmcu=$(MCU) $(TARGET).o -o $(TARGET).elf\n\n"
-                        "$(TARGET).o: $(TARGET).c\n\t"
-                        "$(CC) $(CFLAGS) -mmcu=$(MCU) $(TARGET).c\n\n"
+                        "$(OBJCOPY) -j .text -j .data -j .eeprom -O ihex $(TARGET).elf $(TARGET).hex\n\n"
+                        "$(TARGET).elf: $(TARGET).c\n\t"
+                        "$(CC) $(CFLAGS) -mmcu=$(MCU) $(TARGET).c -o $(TARGET).elf\n\n"
                         "clean:\n\t"
-                        "rm -f *.o *.hex *.obj *.hex")
+                        "rm -f *.elf *.hex")
                 f.close()
-                p = subprocess.Popen(['make'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+                p = subprocess.Popen(['make clean\nmake'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
                 result = p.communicate()[0].decode("utf-8")
                 if result.find("error") == -1:
                     compile_output = result
+                    sketchMenu.entryconfigure(3, state='normal')
                     try:
                         f = open(file_name + ".hex", "r")
                         s = f.read()
@@ -292,24 +295,24 @@ def compile(a):
                 else:
                     compile_output = "Error: \n\n" + result
             elif file_type.lower() == "cpp":
-                f.write("PORT=\\\\\\\\.\\\\GLOBALROOT\\\\Device\\\\USBSER000\n"
-                        "MCU=atmega328p\n"
-                        "CFLAGS=-c -Os -Wall -DF_CPU=16000000L\n"
+                f.write("MCU=atmega88\n"
+                        "CFLAGS=-Wall -gdwarf-2 -Os -std=gnu99 -DF_CPU=8000000 -fno-inline-small-functions "
+                        "-ffunction-sections -fdata-sections -Wl,--relax,--gc-sections -Wl,--undefined=_mmcu"
+                        ",--section-start=.mmcu=0x910000 -I ~/Desktop/simavr/simavr/sim/avr\n"
                         "CC=avr-g++\n"
                         "OBJCOPY=avr-objcopy\n\n"
                         f"TARGET={file_name}\n\n"
                         "$(TARGET).hex: $(TARGET).elf\n\t"
-                        "$(OBJCOPY) -O ihex -R .eeprom $(TARGET).elf $(TARGET).hex\n\n"
-                        "$(TARGET).elf: $(TARGET).o\n\t"
-                        "$(CC) -mmcu=$(MCU) $(TARGET).o -o $(TARGET).elf\n\n"
-                        "$(TARGET).o: $(TARGET).cpp\n\t"
-                        "$(CC) $(CFLAGS) -mmcu=$(MCU) $(TARGET).cpp\n\n"
+                        "$(OBJCOPY) -j .text -j .data -j .eeprom -O ihex $(TARGET).elf $(TARGET).hex\n\n"
+                        "$(TARGET).elf: $(TARGET).cpp\n\t"
+                        "$(CC) $(CFLAGS) -mmcu=$(MCU) $(TARGET).cpp -o $(TARGET).elf\n\n"
                         "clean:\n\t"
-                        "rm -f *.o *.hex *.obj *.hex")
+                        "rm -f *.elf *.hex")
                 f.close()
                 p = subprocess.Popen(['make'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
                 result = p.communicate()[0].decode("utf-8")
                 if result.find("error") == -1:
+                    sketchMenu.entryconfigure(3, state='normal')
                     compile_output = result
                     try:
                         f = open(file_name + ".hex", "r")
@@ -337,56 +340,6 @@ def compile(a):
         else:
             pass
 
-"""def compile(a):
-    global file_location
-    global file_type
-    global file_name
-    global file_name_path
-    global saved_file
-    global process
-    compile_output = ""
-    error = ""
-    print(file_location)
-    print(file_name_path)
-    print(file_name)
-    print(file_type)
-    if (file_name == "fn") and (file_name_path == "fnp") and (file_type == "ft") and (file_location == "fl"):
-        saved_file = False
-    if saved_file:
-        check = check_for_compiler()
-        if check:
-            os.chdir(r"{}".format(file_location))
-            if file_type.lower() == "cpp":
-                p = subprocess.Popen(['g++', '-o', file_name + '.exe', file_name + '.cpp'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
-                error = p.communicate()[0].decode("utf-8")
-                if error == "":
-                    p = subprocess.Popen([file_name + '.exe'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-                    compile_output = p.communicate()[0].decode("utf-8")
-                else:
-                    compile_output = error
-            elif file_type.lower() == "c":
-                p = subprocess.Popen(['gcc', '-o', file_name + '.exe', file_name + '.c'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
-                error = p.communicate()[0].decode("utf-8")
-                if error == "":
-                    p = subprocess.Popen([file_name + '.exe'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-                    compile_output = p.communicate()[0].decode("utf-8")
-                else:
-                    compile_output = error
-            else:
-                pass
-            my_text2.configure(state="normal")
-            my_text2.delete(1.0, 'end-1c')
-            my_text2.insert(INSERT, os.getcwd() + "\n" + compile_output)
-            my_text2.configure(state="disabled")
-        else:
-            pass
-    else:
-        answer = tkinter.messagebox.askyesno(title="Warning", message="The file needs to be saved first before running. Do you want to save the file?")
-        if answer:
-            save_file(False)
-        else:
-            pass"""
-
 
 def check_for_compiler():
     global file_type
@@ -394,15 +347,15 @@ def check_for_compiler():
     s = ""
     if file_type.lower() == 'c' or file_type.lower() == 'cpp':
         if file_type.lower() == 'c':
-            p = subprocess.Popen(['g++', '--version'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(['avr-g++ --version'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
             s = p.communicate()[0].decode("utf-8")
         elif file_type.lower() == 'cpp':
-            p = subprocess.Popen(['gcc', '--version'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(['avr-gcc --version'], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
             s = p.communicate()[0].decode("utf-8")
         if s.find(s_to_find) == -1:
-            answer = tkinter.messagebox.askyesno(title="Warning", message="No C/C++ compiler can be found. Please install a C/C++ compiler first before running again.\n\nDo you want to install Cygwin?")
+            answer = tkinter.messagebox.askyesno(title="Warning", message="AVR-GCC compiler cannot be found. Please install a the compiler first before running again.\n\nDo you want to install AVR-GCC compiler?")
             if answer:
-                webbrowser.open("https://cygwin.com/install.html")
+                webbrowser.open("http://winavr.sourceforge.net/")
             else:
                 pass
         else:
@@ -416,7 +369,20 @@ def stop(p):
 
 
 def upload(a):
-    print("Hello")
+    global file_name
+    global file_location
+    name = file_location + '/' + file_name
+    p = subprocess.Popen('~/Desktop/simavr/simavr/run_avr --mcu atmega88 --freq 8000000 {}.elf'.format(name), shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+    compile_output = p.communicate()[0].decode("utf-8")
+    my_text2.configure(state="normal")
+    my_text2.delete(1.0, 'end-1c')
+    my_text2.insert(tk.INSERT, os.getcwd() + "\nUpload Complete:\n\n" + compile_output)
+    my_text2.configure(state="disabled")
+    sketchMenu.entryconfigure(4, state='normal')
+
+
+def gtkwave(a):
+    p = subprocess.Popen('gtkwave gtkwave_trace.vcd', shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
 
 
 def start_debug(a):
@@ -461,9 +427,9 @@ def start_debug(a):
                     last_breakpoint = min(bp_location)
                     my_text.tag_add("breakpoint", str(last_breakpoint) + ".0", str(last_breakpoint) + ".999")
                     my_text.tag_configure("breakpoint", background="red", foreground="black")
-                    sketchMenu.entryconfigure(6, state='normal')
                     sketchMenu.entryconfigure(7, state='normal')
                     sketchMenu.entryconfigure(8, state='normal')
+                    sketchMenu.entryconfigure(9, state='normal')
                 else:
                     output = error
             elif file_type.lower() == "c":
@@ -487,9 +453,9 @@ def start_debug(a):
                     last_breakpoint = min(bp_location)
                     my_text.tag_add("breakpoint", str(last_breakpoint) + ".0", str(last_breakpoint) + ".999")
                     my_text.tag_configure("breakpoint", background="red", foreground="black")
-                    sketchMenu.entryconfigure(6, state='normal')
                     sketchMenu.entryconfigure(7, state='normal')
                     sketchMenu.entryconfigure(8, state='normal')
+                    sketchMenu.entryconfigure(9, state='normal')
                 else:
                     output = error
             else:
@@ -615,15 +581,15 @@ def get_breakpoint(event):
     bp = int(event.y)//24 + 1
     if len(breakpoint_list) == 0:
         breakpoint_list.append(str(bp))
-        sketchMenu.entryconfigure(5, state='normal')
+        sketchMenu.entryconfigure(6, state='normal')
     else:
         breakpoint_list_set = set(breakpoint_list)
         if str(bp) in breakpoint_list_set:
             breakpoint_list.remove(str(bp))
-            sketchMenu.entryconfigure(5, state='disabled')
+            sketchMenu.entryconfigure(6, state='disabled')
         else:
             breakpoint_list.append(str(bp))
-            sketchMenu.entryconfigure(5, state='normal')
+            sketchMenu.entryconfigure(6, state='normal')
     redraw()
     print("Clicked at: ", bp)
 
@@ -686,7 +652,7 @@ def highlight_text():
 
 root = tk.Tk()
 root.title("Digital MCU Simulator IDE")
-root.iconbitmap('C:/Users/bunna/Desktop/Code/Python/DMCUS/icon.ico')
+#root.iconbitmap(r'icon.ico')
 root.geometry("1200x750")
 
 
@@ -723,9 +689,9 @@ my_text3.configure(state='disabled')
 my_canvas = tk.Canvas(my_frame, width=25, height=22)
 my_canvas.pack(fill=tk.BOTH, side=tk.LEFT, padx=5, pady=5)
 
-Pmw.initialise(root)
-balloon = Pmw.Balloon(root)
-balloon.bind(my_canvas, "Click on the number to set breakpoints")
+#Pmw.initialise(root)
+#balloon = Pmw.Balloon(root)
+#balloon.bind(my_canvas, "Click on the number to set breakpoints")
 
 my_text.pack(fill=tk.BOTH, side=tk.RIGHT, padx=5, pady=5)
 root.bind("<Return>", lambda event: redraw())
@@ -772,16 +738,19 @@ sketchMenu.add_command(label="Compile", command=lambda: compile(False), accelera
 sketchMenu.add_command(label="Stop", command=lambda: stop(process))
 sketchMenu.add_separator()
 sketchMenu.add_command(label="Upload", command=lambda: upload(False))
+sketchMenu.add_command(label="Plot with GTKWave", command=lambda: gtkwave(False))
 sketchMenu.add_separator()
 sketchMenu.add_command(label="Start Debug", command=lambda: start_debug(False))
 sketchMenu.add_command(label="Step", command=lambda: step_debug(False))
 sketchMenu.add_command(label="Continue", command=lambda: continue_debug(False))
 sketchMenu.add_command(label="Stop Debug", command=lambda: stop_debug(False))
 menubar.add_cascade(label="Sketch", menu=sketchMenu)
-sketchMenu.entryconfigure(5, state='disabled')
+sketchMenu.entryconfigure(3, state='disabled')
+sketchMenu.entryconfigure(4, state='disabled')
 sketchMenu.entryconfigure(6, state='disabled')
 sketchMenu.entryconfigure(7, state='disabled')
 sketchMenu.entryconfigure(8, state='disabled')
+sketchMenu.entryconfigure(9, state='disabled')
 
 helpMenu = tk.Menu(menubar, tearoff=False)
 helpMenu.add_command(label="Help", command=lambda: webbrowser.open("https://tamu.edu"))
